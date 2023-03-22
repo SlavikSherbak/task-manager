@@ -17,11 +17,7 @@ class Position(models.Model):
 
 
 class Worker(AbstractUser):
-    position = models.ForeignKey(
-        Position,
-        on_delete=models.CASCADE,
-        default=1
-    )
+    position = models.ForeignKey(Position, on_delete=models.CASCADE, default=1)
 
     def __str__(self) -> str:
         return (
@@ -43,18 +39,12 @@ class Task(models.Model):
     description = models.CharField(max_length=255)
     deadline = models.DateTimeField()
     is_completed = models.BooleanField(default=False)
-    priority = models.ForeignKey(
-        Priority,
-        on_delete=models.CASCADE
-    )
-    task_type = models.ForeignKey(
-        TaskType,
-        on_delete=models.CASCADE
-    )
-    assignees = models.ManyToManyField(
-        Worker,
-        related_name="tasks"
-    )
+    priority = models.ForeignKey(Priority, on_delete=models.CASCADE)
+    task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
+    assignees = models.ManyToManyField(Worker, related_name="tasks", blank=True)
+
+    class Meta:
+        ordering = ["is_completed"]
 
     def __str__(self) -> str:
         return f"{self.name}, is completed {self.is_completed}"
@@ -62,10 +52,7 @@ class Task(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=64, default="New team")
-    team = models.ManyToManyField(
-        Worker,
-        related_name="teams"
-    )
+    team = models.ManyToManyField(Worker, related_name="teams")
 
     def __str__(self) -> str:
         return f"{self.name}"
@@ -73,14 +60,8 @@ class Team(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=64, unique=True)
-    tasks = models.ManyToManyField(
-        Task,
-        related_name="projects"
-    )
-    team = models.ForeignKey(
-        Team,
-        on_delete=models.CASCADE
-    )
+    tasks = models.ManyToManyField(Task, related_name="projects", blank=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"{self.name}"
