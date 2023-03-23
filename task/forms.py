@@ -9,7 +9,7 @@ from django.contrib.auth.forms import (
 )
 from django.utils.translation import gettext_lazy as _
 
-from task.models import Worker
+from task.models import Worker, Project
 
 
 class RegistrationForm(UserCreationForm):
@@ -103,3 +103,9 @@ class UserPasswordChangeForm(PasswordChangeForm):
         ),
         label="Confirm New Password",
     )
+
+
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        exclude = ["tasks"]

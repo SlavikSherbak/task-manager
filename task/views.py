@@ -1,29 +1,88 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView, PasswordResetConfirmView
-from admin_soft.forms import RegistrationForm, LoginForm, UserPasswordResetForm, UserSetPasswordForm, UserPasswordChangeForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.views import (
+    LoginView,
+    PasswordResetView,
+    PasswordChangeView,
+    PasswordResetConfirmView,
+)
+from django.urls import reverse_lazy
+from django.views import generic
+
+from task.forms import (
+    RegistrationForm,
+    LoginForm,
+    UserPasswordResetForm,
+    UserSetPasswordForm,
+    UserPasswordChangeForm,
+    ProjectForm,
+    TaskForm,
+    TeamForm,
+)
 from django.contrib.auth import logout
 
-# Create your views here.
+from task.models import (
+    Project,
+    Task,
+    Worker,
+    Team,
+    Position,
+    TaskType,
+    Priority
+)
 
-# Pages
-def index(request):
 
-  return render(request, 'pages/index.html', { 'segment': 'index' })
+class ProjectsListView(LoginRequiredMixin, generic.ListView):
+    model = Project
+    context_object_name = "projects_list"
+    template_name = "pages/index.html"
 
-def billing(request):
-  return render(request, 'pages/billing.html', { 'segment': 'billing' })
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-def tables(request):
-  return render(request, 'pages/tables.html', { 'segment': 'tables' })
+        tasks = Task.objects.exclude(is_completed=True)
 
-def vr(request):
-  return render(request, 'pages/virtual-reality.html', { 'segment': 'vr' })
+        context["tasks"] = tasks
+        context["segment"] = "index"
+        return context
 
-def rtl(request):
-  return render(request, 'pages/rtl.html', { 'segment': 'rtl' })
 
-def profile(request):
-  return render(request, 'pages/profile.html', { 'segment': 'profile' })
+class ProjectsDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Project
+    template_name = "pages/tables.html"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        pk = self.kwargs
+        for k, v in pk.items():
+            pk = v
+        project = Project.objects.get(pk=pk)
+
+        tasks = Task.objects.filter(project=project.id)
+
+        context["tasks"] = tasks
+        context["segment"] = "tables"
+        return context
+
+
+class ProjectCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Project
+    form_class = ProjectForm
+    success_url = reverse_lazy("task:index")
+
+
+class ProjectUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Project
+    form_class = ProjectForm
+    success_url = reverse_lazy("task:index")
+
+
+class ProjectDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Project
+    success_url = reverse_lazy("task:index")
 
 
 # Authentication

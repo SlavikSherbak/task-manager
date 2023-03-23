@@ -1,15 +1,26 @@
 from django.urls import path
-from admin_soft import views
+from task import views
 from django.contrib.auth import views as auth_views
+
+from task.views import (
+    ProjectsListView, ProjectsDetailView, ProjectCreateView,
+    ProjectUpdateView, ProjectDeleteView, toggle_mark_completed,
+    toggle_assign_to_task, TaskDeleteView, TaskUpdateView,
+    TaskCreateView, TeamUpdateView, TeamDeleteView, TeamListView,
+    toggle_remove_worker_from_team, TeamCreateView, AdditionalParametersListView,
+    PriorityCreateView, PriorityUpdateView, PriorityDeleteView,
+    PositionCreateView, PositionUpdateView, PositionDeleteView,
+    TaskTypeDeleteView, TaskTypeUpdateView, TaskTypeCreateView,
+    WorkerProfileUpdateView
+)
 
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('billing/', views.billing, name='billing'),
-    path('tables/', views.tables, name='tables'),
-    path('vr/', views.vr, name='vr'),
-    path('rtl/', views.rtl, name='rtl'),
-    path('profile/', views.profile, name='profile'),
+    path("", ProjectsListView.as_view(), name="index"),
+    path("project/create/", ProjectCreateView.as_view(), name="project-create"),
+    path("project/<int:pk>/update/", ProjectUpdateView.as_view(), name="project-update"),
+    path("project/<int:pk>/delete/", ProjectDeleteView.as_view(), name="project-delete"),
+    path("project/<int:pk>/", ProjectsDetailView.as_view(), name="project-detail"),
 
     # Authentication
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),
