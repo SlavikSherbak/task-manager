@@ -21,7 +21,24 @@ urlpatterns = [
     path("project/<int:pk>/update/", ProjectUpdateView.as_view(), name="project-update"),
     path("project/<int:pk>/delete/", ProjectDeleteView.as_view(), name="project-delete"),
     path("project/<int:pk>/", ProjectsDetailView.as_view(), name="project-detail"),
-
+    path("task/create/", TaskCreateView.as_view(), name="task-create"),
+    path("task/<int:pk>/update/", TaskUpdateView.as_view(), name="task-update"),
+    path("task/<int:pk>/delete/", TaskDeleteView.as_view(), name="task-delete"),
+    path(
+        "project/<int:pk>/task/<int:task_id>/toggle-assign-status/",
+        toggle_mark_completed,
+        name="toggle_mark_completed",
+    ),
+    path(
+        "project/<int:pk>/task/<int:task_id>/toggle-assign-task/",
+        toggle_assign_to_task,
+        name="toggle_assign_to_task",
+    ),
+    path(
+        "team<int:pk>/team/<int:team_id>/toggle-remove_worker/",
+        toggle_remove_worker_from_team,
+        name="toggle_remove_worker_from_team",
+    ),
     # Authentication
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),
     path('accounts/logout/', views.logout_view, name='logout'),

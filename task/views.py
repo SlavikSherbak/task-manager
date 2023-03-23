@@ -85,6 +85,49 @@ class ProjectDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("task:index")
 
 
+class TaskCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Task
+    form_class = TaskForm
+
+
+class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Task
+    form_class = TaskForm
+
+
+class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Task
+    success_url = reverse_lazy("task:index")
+
+
+@login_required
+def toggle_mark_completed(request, pk, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    if not task.is_completed:
+        task.is_completed = True
+        task.save()
+    return HttpResponseRedirect(reverse_lazy("task:project-detail", args=[pk]))
+
+
+@login_required
+def toggle_assign_to_task(request, pk, task_id):
+    worker = Worker.objects.get(pk=request.user.id)
+    task = Task.objects.get(pk=task_id)
+    if worker in task.assignees.all():
+        task.assignees.remove(worker)
+    else:
+        task.assignees.add(worker)
+    return HttpResponseRedirect(reverse_lazy("task:project-detail", args=[pk]))
+
+
+@login_required
+def toggle_remove_worker_from_team(request, pk, team_id):
+    team = Team.objects.get(pk=team_id)
+    worker = Worker.objects.get(pk=pk)
+    team.team.remove(worker)
+    return HttpResponseRedirect(reverse_lazy("task:team-list"))
+
+
 # Authentication
 class UserLoginView(LoginView):
   template_name = 'accounts/login.html'

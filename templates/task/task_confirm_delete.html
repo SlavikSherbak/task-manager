@@ -1,0 +1,55 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="py-4">
+    <div class="row">
+        <div class="col-11 mb-4">
+            <div class="card">
+              <div class="card-header pb-0">
+                <h4 class="text-center">Task confirm delete</h4>
+              </div>
+              <div class="card-body">
+                <div class="bg-gray-100 p-4 border-0 p-4 mb-2 border-radius-lg">
+            <div class="d-flex flex-column">
+              <h6 class="">{{ task.name }}</h6>
+              <span class="">Description: <span class="text-dark font-weight-bold ms-sm-2">{{ task.description }}</span></span>
+              <span class="">Deadline: <span class="text-dark ms-sm-2 font-weight-bold">{{ task.deadline }}</span></span>
+              <span class="">Priority: <span class="text-dark ms-sm-2 font-weight-bold">{{ task.priority.name }}</span></span>
+              <span class="">Task type: <span class="text-dark ms-sm-2 font-weight-bold">{{ task.task_type.name }}</span></span>
+              <span class="">Performer: <span class="text-dark ms-sm-2 font-weight-bold">
+                {% if task.assignees %}
+                  {% for assignee in task.assignees.all %}
+                    {{ assignee.username }},
+                  {% endfor %}
+                {% else %}
+                  <p>Nobody here</p>
+                {% endif %}
+              </span></span>
+              <span class="">Status: <span class="text-dark ms-sm-2 font-weight-bold">
+                  {% if task.is_completed %}
+                    Completed ✅
+                  {% else %}
+                    <span>
+                      Not completed
+                    </span>
+                  {% endif %}
+
+              </span></span>
+            </div>
+
+          </div><br>
+                <form action="" method="post">
+                  {% csrf_token %}
+
+                  <h5 class="mb-0 text-sm">Are you sure you want to delete the project {{ task.name }}?</h5>
+                  <p class="text-xs text-secondary mb-0">If you delete a task, you will not be able to restore it</p>
+                  <input type="submit" value="Yes, i'm sure" class="btn btn-danger m-3">
+                </form>
+              </div>
+            </div>
+        </div>
+    </div>
+      {% include "includes/footer-fullscreen.html" %}
+    </div>
+{% endblock %}
+
