@@ -2,21 +2,72 @@ from django.urls import path
 from task import views
 from django.contrib.auth import views as auth_views
 
-from task.views import ProjectsListView, ProjectsDetailView, ProjectCreateView, ProjectUpdateView, ProjectDeleteView, \
-    toggle_mark_completed, toggle_assign_to_task, TaskDeleteView, TaskUpdateView, TaskCreateView, TeamUpdateView, \
-    TeamDeleteView, TeamListView, toggle_remove_worker_from_team, TeamCreateView, AdditionalParametersListView, \
-    PriorityCreateView, PriorityUpdateView, PriorityDeleteView, PositionCreateView, PositionUpdateView, \
-    PositionDeleteView, TaskTypeDeleteView, TaskTypeUpdateView, TaskTypeCreateView, WorkerProfileUpdateView
+from task.views import (
+    ProjectsListView,
+    ProjectsDetailView,
+    ProjectCreateView,
+    ProjectUpdateView,
+    ProjectDeleteView,
+    toggle_mark_completed,
+    toggle_assign_to_task,
+    TaskDeleteView,
+    TaskUpdateView,
+    TaskCreateView,
+    TeamUpdateView,
+    TeamDeleteView,
+    TeamListView,
+    toggle_remove_worker_from_team,
+    TeamCreateView,
+    AdditionalParametersListView,
+    PriorityCreateView,
+    PriorityUpdateView,
+    PriorityDeleteView,
+    PositionCreateView,
+    PositionUpdateView,
+    PositionDeleteView,
+    TaskTypeDeleteView,
+    TaskTypeUpdateView,
+    TaskTypeCreateView,
+    WorkerProfileUpdateView,
+)
 
 urlpatterns = [
     path("", ProjectsListView.as_view(), name="index"),
-    path("project/create/", ProjectCreateView.as_view(), name="project-create"),
-    path("project/<int:pk>/update/", ProjectUpdateView.as_view(), name="project-update"),
-    path("project/<int:pk>/delete/", ProjectDeleteView.as_view(), name="project-delete"),
-    path("project/<int:pk>/", ProjectsDetailView.as_view(), name="project-detail"),
-    path("task/create/", TaskCreateView.as_view(), name="task-create"),
-    path("task/<int:pk>/update/", TaskUpdateView.as_view(), name="task-update"),
-    path("task/<int:pk>/delete/", TaskDeleteView.as_view(), name="task-delete"),
+    path(
+        "project/create/",
+        ProjectCreateView.as_view(),
+        name="project-create"
+    ),
+    path(
+        "project/<int:pk>/update/",
+        ProjectUpdateView.as_view(),
+        name="project-update"
+    ),
+    path(
+        "project/<int:pk>/delete/",
+        ProjectDeleteView.as_view(),
+        name="project-delete"
+    ),
+    path(
+        "project/<int:pk>/",
+        ProjectsDetailView.as_view(),
+        name="project-detail"
+    ),
+    path(
+        "task/create/",
+        TaskCreateView.as_view(),
+        name="task-create"
+    ),
+    path(
+        "task/<int:pk>/update/",
+        TaskUpdateView.as_view(),
+        name="task-update"
+    ),
+    path(
+        "task/<int:pk>/delete/",
+        TaskDeleteView.as_view(),
+        name="task-delete"
+    ),
     path(
         "project/<int:pk>/task/<int:task_id>/toggle-assign-status/",
         toggle_mark_completed,
@@ -36,18 +87,62 @@ urlpatterns = [
     path("team/create", TeamCreateView.as_view(), name="team-create"),
     path("team/<int:pk>/update", TeamUpdateView.as_view(), name="team-update"),
     path("team/<int:pk>/delete", TeamDeleteView.as_view(), name="team-delete"),
-    path("additional-parameters/", AdditionalParametersListView.as_view(), name="additional-parameters"),
-    path("priority/create", PriorityCreateView.as_view(), name="priority-create"),
-    path("priority/<int:pk>/update", PriorityUpdateView.as_view(), name="priority-update"),
-    path("priority/<int:pk>/delete", PriorityDeleteView.as_view(), name="priority-delete"),
-    path("position/create", PositionCreateView.as_view(), name="position-create"),
-    path("position/<int:pk>/update", PositionUpdateView.as_view(), name="position-update"),
-    path("position/<int:pk>/delete", PositionDeleteView.as_view(), name="position-delete"),
-    path("task-type/create", TaskTypeCreateView.as_view(), name="task-type-create"),
-    path("task-type/<int:pk>/update", TaskTypeUpdateView.as_view(), name="task-type-update"),
-    path("task-type/<int:pk>/delete", TaskTypeDeleteView.as_view(), name="task-type-delete"),
+    path(
+        "additional-parameters/",
+        AdditionalParametersListView.as_view(),
+        name="additional-parameters",
+    ),
+    path(
+        "priority/create",
+        PriorityCreateView.as_view(),
+        name="priority-create"
+    ),
+    path(
+        "priority/<int:pk>/update",
+        PriorityUpdateView.as_view(),
+        name="priority-update"
+    ),
+    path(
+        "priority/<int:pk>/delete",
+        PriorityDeleteView.as_view(),
+        name="priority-delete"
+    ),
+    path(
+        "position/create",
+        PositionCreateView.as_view(),
+        name="position-create"
+    ),
+    path(
+        "position/<int:pk>/update",
+        PositionUpdateView.as_view(),
+        name="position-update"
+    ),
+    path(
+        "position/<int:pk>/delete",
+        PositionDeleteView.as_view(),
+        name="position-delete"
+    ),
+    path(
+        "task-type/create",
+        TaskTypeCreateView.as_view(),
+        name="task-type-create"
+    ),
+    path(
+        "task-type/<int:pk>/update",
+        TaskTypeUpdateView.as_view(),
+        name="task-type-update",
+    ),
+    path(
+        "task-type/<int:pk>/delete",
+        TaskTypeDeleteView.as_view(),
+        name="task-type-delete",
+    ),
     path("accounts/profile/", views.profile, name="profile"),
-    path("accounts/profile/<int:pk>/update", WorkerProfileUpdateView.as_view(), name="worker-update"),
+    path(
+        "accounts/profile/<int:pk>/update",
+        WorkerProfileUpdateView.as_view(),
+        name="worker-update",
+    ),
     # Authentication
     path("accounts/login/", views.UserLoginView.as_view(), name="login"),
     path("accounts/logout/", views.logout_view, name="logout"),

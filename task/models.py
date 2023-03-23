@@ -61,8 +61,14 @@ class Task(models.Model):
     is_completed = models.BooleanField(default=False)
     priority = models.ForeignKey(Priority, on_delete=models.CASCADE)
     task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
-    assignees = models.ManyToManyField(Worker, related_name="worker", blank=True, default=None)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None)
+    assignees = models.ManyToManyField(
+        Worker, related_name="worker", blank=True, default=None
+    )
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        default=None
+    )
 
     class Meta:
         ordering = ["is_completed"]
@@ -72,4 +78,3 @@ class Task(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name}, is completed {self.is_completed}"
-

@@ -28,7 +28,7 @@ from django.utils.text import slugify
 try:
     from django.utils.translation import ugettext_lazy as _
 except ImportError:
-    from django.utils.translation import gettext_lazy as _  # Django 4.0.0 and more
+    from django.utils.translation import gettext_lazy as _
 
 try:
     from collections import OrderedDict
@@ -97,14 +97,16 @@ def get_app_list(context, order=True):
                 if perms.get("change", False) or perms.get("view", False):
                     try:
                         model_dict["admin_url"] = reverse(
-                            "admin:%s_%s_changelist" % info, current_app=admin_site.name
+                            "admin:%s_%s_changelist" % info,
+                            current_app=admin_site.name
                         )
                     except NoReverseMatch:
                         pass
                 if perms.get("add", False):
                     try:
                         model_dict["add_url"] = reverse(
-                            "admin:%s_%s_add" % info, current_app=admin_site.name
+                            "admin:%s_%s_add" % info,
+                            current_app=admin_site.name
                         )
                     except NoReverseMatch:
                         pass
@@ -151,7 +153,9 @@ def get_app_list(context, order=True):
 def get_admin_site(context):
     try:
         current_resolver = resolve(context.get("request").path)
-        index_resolver = resolve(reverse("%s:index" % current_resolver.namespaces[0]))
+        index_resolver = resolve(reverse(
+            "%s:index" % current_resolver.namespaces[0]
+        ))
 
         if hasattr(index_resolver.func, "admin_site"):
             return index_resolver.func.admin_site
@@ -159,7 +163,7 @@ def get_admin_site(context):
         for func_closure in index_resolver.func.__closure__:
             if isinstance(func_closure.cell_contents, AdminSite):
                 return func_closure.cell_contents
-    except:
+    except Exception:
         pass
 
     return admin.site
@@ -215,7 +219,10 @@ def get_model_queryset(admin_site, model, request, preserved_filters=None):
         queryset = model.objects
 
     list_display = model_admin.get_list_display(request)
-    list_display_links = model_admin.get_list_display_links(request, list_display)
+    list_display_links = model_admin.get_list_display_links(
+        request,
+        list_display
+    )
     list_filter = model_admin.get_list_filter(request)
     search_fields = (
         model_admin.get_search_fields(request)
@@ -232,7 +239,7 @@ def get_model_queryset(admin_site, model, request, preserved_filters=None):
     if actions:
         list_display = ["action_checkbox"] + list(list_display)
 
-    ChangeList = model_admin.get_changelist(request)
+    change_list = model_admin.get_changelist(request)
 
     change_list_args = [
         request,
@@ -257,7 +264,7 @@ def get_model_queryset(admin_site, model, request, preserved_filters=None):
         pass
 
     try:
-        cl = ChangeList(*change_list_args)
+        cl = change_list(*change_list_args)
         queryset = cl.get_queryset(request)
     except IncorrectLookupParameters:
         pass
@@ -291,7 +298,6 @@ def get_possible_language_codes():
 
 def get_original_menu_items(context):
     if context.get("user") and user_is_authenticated(context["user"]):
-        # pinned_apps = PinnedApplication.objects.filter(user=context['user'].pk).values_list('app_label', flat=True)
         pinned_apps = []
     else:
         pinned_apps = []
@@ -341,16 +347,22 @@ def get_menu_item_url(url, original_app_list):
             )
             return models[url["model"]]
         elif url_type == "reverse":
-            return reverse(url["name"], args=url.get("args"), kwargs=url.get("kwargs"))
+            return reverse(
+                url["name"],
+                args=url.get("args"),
+                kwargs=url.get("kwargs")
+            )
     elif isinstance(url, str):
         return url
 
 
 def get_menu_items(context):
-    # pinned_apps = PinnedApplication.objects.filter(user=context['user'].pk).values_list('app_label', flat=True)
     pinned_apps = []
     original_app_list = OrderedDict(
-        map(lambda app: (app["app_label"], app), get_original_menu_items(context))
+        map(
+            lambda app: (app["app_label"], app),
+            get_original_menu_items(context)
+        )
     )
     custom_app_list = None
     custom_app_list_deprecated = None
@@ -406,9 +418,15 @@ def get_menu_items(context):
             if not app_label:
                 if "label" not in data:
                     raise Exception(
-                        "Custom menu items should at least have 'label' or 'app_label' key"
+                        (
+                            "Custom menu items should "
+                            "at least have 'label' or 'app_label' key"
+                        )
                     )
-                app_label = "custom_%s" % slugify(data["label"], allow_unicode=True)
+                app_label = "custom_%s" % slugify(
+                    data["label"],
+                    allow_unicode=True
+                )
 
             if app_label in original_app_list:
                 item = original_app_list[app_label].copy()
@@ -420,7 +438,10 @@ def get_menu_items(context):
 
             if "items" in data:
                 item["items"] = list(
-                    map(lambda x: get_menu_item_app_model(app_label, x), data["items"])
+                    map(
+                        lambda x: get_menu_item_app_model(app_label, x),
+                        data["items"]
+                    )
                 )
 
             if "url" in data:
@@ -519,8 +540,8 @@ def get_menu_items(context):
 def context_to_dict(context):
     if isinstance(context, Context):
         flat = {}
-        for d in context.dicts:
-            flat.update(d)
+        for dictionary in context.dicts:
+            flat.update(dictionary)
         context = flat
 
     return context

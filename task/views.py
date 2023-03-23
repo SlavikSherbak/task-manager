@@ -57,8 +57,8 @@ class ProjectsDetailView(LoginRequiredMixin, generic.DetailView):
         context = super().get_context_data(**kwargs)
 
         pk = self.kwargs
-        for k, v in pk.items():
-            pk = v
+        for key, value in pk.items():
+            pk = value
         project = Project.objects.get(pk=pk)
 
         tasks = Task.objects.filter(project=project.id)
@@ -154,7 +154,7 @@ class TeamUpdateView(LoginRequiredMixin, generic.UpdateView):
         initial = super().get_initial()
         team = self.get_object()
         workers = team.team.all()
-        initial['worker'] = workers
+        initial["worker"] = workers
         return initial
 
 
@@ -230,7 +230,9 @@ class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
 @login_required
 def profile(request):
     projects = Project.objects.all()
-    tasks = Task.objects.filter(assignees__username__contains=request.user.username)
+    tasks = Task.objects.filter(
+        assignees__username__contains=request.user.username
+    )
 
     context = {
         "tasks": tasks,

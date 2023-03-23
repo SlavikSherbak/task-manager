@@ -22,7 +22,10 @@ class RegistrationForm(UserCreationForm):
     password2 = forms.CharField(
         label=_("Password Confirmation"),
         widget=forms.PasswordInput(
-            attrs={"class": "form-control", "placeholder": "Password Confirmation"}
+            attrs={
+                "class": "form-control",
+                "placeholder": "Password Confirmation"
+            }
         ),
     )
 
@@ -61,7 +64,9 @@ class LoginForm(AuthenticationForm):
 
 
 class UserPasswordResetForm(PasswordResetForm):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-control"}))
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={"class": "form-control"})
+    )
 
 
 class UserSetPasswordForm(SetPasswordForm):
@@ -75,7 +80,10 @@ class UserSetPasswordForm(SetPasswordForm):
     new_password2 = forms.CharField(
         max_length=50,
         widget=forms.PasswordInput(
-            attrs={"class": "form-control", "placeholder": "Confirm New Password"}
+            attrs={
+                "class": "form-control",
+                "placeholder": "Confirm New Password"
+            }
         ),
         label="Confirm New Password",
     )
@@ -99,7 +107,10 @@ class UserPasswordChangeForm(PasswordChangeForm):
     new_password2 = forms.CharField(
         max_length=50,
         widget=forms.PasswordInput(
-            attrs={"class": "form-control", "placeholder": "Confirm New Password"}
+            attrs={
+                "class": "form-control",
+                "placeholder": "Confirm New Password"
+            }
         ),
         label="Confirm New Password",
     )
@@ -120,7 +131,7 @@ class TaskForm(forms.ModelForm):
     assignees = forms.ModelMultipleChoiceField(
         queryset=Worker.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        required=False
+        required=False,
     )
 
     class Meta:
@@ -133,7 +144,7 @@ class TeamForm(forms.ModelForm):
     team = forms.ModelMultipleChoiceField(
         queryset=Worker.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        required=False
+        required=False,
     )
 
     class Meta:
