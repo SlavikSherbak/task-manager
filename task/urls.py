@@ -43,6 +43,10 @@ urlpatterns = [
     path("team/create", TeamCreateView.as_view(), name="team-create"),
     path("team/<int:pk>/update", TeamUpdateView.as_view(), name="team-update"),
     path("team/<int:pk>/delete", TeamDeleteView.as_view(), name="team-delete"),
+    path("additional-parameters/", AdditionalParametersListView.as_view(), name="additional-parameters"),
+    path("priority/create", PriorityCreateView.as_view(), name="priority-create"),
+    path("priority/<int:pk>/update", PriorityUpdateView.as_view(), name="priority-update"),
+    path("priority/<int:pk>/delete", PriorityDeleteView.as_view(), name="priority-delete"),
 
     # Authentication
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),

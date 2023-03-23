@@ -1,0 +1,26 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="py-4">
+    <div class="row">
+        <div class="col-11 mb-4">
+            <div class="card">
+              <div class="card-header pb-0">
+                <h4 class="text-center">Priority confirm delete</h4>
+              </div>
+              <div class="card-body">
+                <form action="" method="post">
+                  {% csrf_token %}
+
+                  <h5 class="mb-0 text-sm">Are you sure you want to delete the priority {{ priority.name }}?</h5>
+                  <p class="text-xs text-secondary mb-0">If you delete a priority, you will not be able to restore it</p>
+                  <input type="submit" value="Yes, i'm sure" class="btn btn-danger m-3">
+                </form>
+              </div>
+            </div>
+        </div>
+    </div>
+      {% include "includes/footer-fullscreen.html" %}
+    </div>
+{% endblock %}
+
