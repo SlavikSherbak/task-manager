@@ -1,0 +1,47 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="text-center">
+    <h4 class="mb-0 px-5">Your teams</h4>
+    <a class="btn btn-link text-dark text-sm px-6" href="{% url "task:team-create" %}"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Create team</a>
+  </div>
+  <div class="row d-flex m-2">
+    {% for team in team_list %}
+      {% if user in team.team.all %}
+        <div class="col-12 col-xl-4 px-1 m-0">
+          <div class="card h-100">
+            <div class="card-header">
+              <div class="row">
+                <h6 class="mb-0 col-6">{{ team.name }}</h6>
+                <span class="d-flex justify-content-center mb-0 col-6 d-inline-block text-end">
+                  <a class="btn btn-link text-dark mb-0" href="{% url "task:team-update" pk=team.id %}"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+                  <a class="btn btn-link text-danger text-gradient mb-0" href="{% url "task:team-delete" pk=team.id %}"><i class="far fa-trash-alt me-2"></i>Delete</a>
+                </span>
+
+              </div>
+              </div>
+            <div class="card-body p-3">
+              <ul class="list-group">
+                {% for worker in team.team.all %}
+                  <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2">
+                    <div class="d-flex align-items-start flex-column justify-content-center">
+                      <h6 class="mb-0 text-sm">{{ worker.username }}.</h6>
+                      <p class="mb-0 text-xs">{{ worker.email }}</p>
+                    </div>
+                    <a class="btn btn-link pe-3 ps-0 mb-0 ms-auto" href="{% url "task:toggle_remove_worker_from_team" pk=worker.pk team_id=team.pk %}">Remove</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+    {% include "includes/footer-fullscreen.html" %}
+</div>
+
+
+{% endblock content %}

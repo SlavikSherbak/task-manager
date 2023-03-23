@@ -128,6 +128,41 @@ def toggle_remove_worker_from_team(request, pk, team_id):
     return HttpResponseRedirect(reverse_lazy("task:team-list"))
 
 
+class TeamListView(LoginRequiredMixin, generic.ListView):
+    model = Team
+    context_object_name = "team_list"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["segment"] = "team"
+        return context
+
+
+class TeamCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Team
+    form_class = TeamForm
+    success_url = reverse_lazy("task:team-list")
+
+
+class TeamUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Team
+    form_class = TeamForm
+    success_url = reverse_lazy("task:team-list")
+
+    def get_initial(self):
+        initial = super().get_initial()
+        team = self.get_object()
+        workers = team.team.all()
+        initial['worker'] = workers
+        return initial
+
+
+class TeamDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Team
+    success_url = reverse_lazy("task:team-list")
+
+
 # Authentication
 class UserLoginView(LoginView):
   template_name = 'accounts/login.html'

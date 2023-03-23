@@ -9,7 +9,7 @@ from django.contrib.auth.forms import (
 )
 from django.utils.translation import gettext_lazy as _
 
-from task.models import Worker, Project, Task
+from task.models import Worker, Project, Task, Team
 
 
 class RegistrationForm(UserCreationForm):
@@ -127,3 +127,15 @@ class TaskForm(forms.ModelForm):
         model = Task
         exclude = ["is_completed"]
         widgets = {"deadline": DateTimeInput()}
+
+
+class TeamForm(forms.ModelForm):
+    team = forms.ModelMultipleChoiceField(
+        queryset=Worker.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    class Meta:
+        model = Team
+        fields = "__all__"

@@ -39,6 +39,11 @@ urlpatterns = [
         toggle_remove_worker_from_team,
         name="toggle_remove_worker_from_team",
     ),
+    path("team/", TeamListView.as_view(), name="team-list"),
+    path("team/create", TeamCreateView.as_view(), name="team-create"),
+    path("team/<int:pk>/update", TeamUpdateView.as_view(), name="team-update"),
+    path("team/<int:pk>/delete", TeamDeleteView.as_view(), name="team-delete"),
+
     # Authentication
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),
     path('accounts/logout/', views.logout_view, name='logout'),
