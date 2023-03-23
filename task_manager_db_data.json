@@ -1,0 +1,356 @@
+[
+  {
+    "model": "task.position",
+    "pk": 1,
+    "fields": {
+      "name": "DevOps"
+    }
+  },
+  {
+    "model": "task.position",
+    "pk": 2,
+    "fields": {
+      "name": "Designer"
+    }
+  },
+  {
+    "model": "task.position",
+    "pk": 3,
+    "fields": {
+      "name": "QA"
+    }
+  },
+  {
+    "model": "task.position",
+    "pk": 4,
+    "fields": {
+      "name": "Project Manager"
+    }
+  },
+  {
+    "model": "task.position",
+    "pk": 5,
+    "fields": {
+      "name": "Develop"
+    }
+  },
+  {
+    "model": "task.priority",
+    "pk": 1,
+    "fields": {
+      "name": "Urgent"
+    }
+  },
+  {
+    "model": "task.priority",
+    "pk": 2,
+    "fields": {
+      "name": "Middle"
+    }
+  },
+  {
+    "model": "task.priority",
+    "pk": 3,
+    "fields": {
+      "name": "Hight"
+    }
+  },
+  {
+    "model": "task.priority",
+    "pk": 4 ,
+    "fields": {
+      "name": "Low"
+    }
+  },
+  {
+    "model": "task.tasktype",
+    "pk": 1 ,
+    "fields": {
+      "name": "QA"
+    }
+  },
+  {
+    "model": "task.tasktype",
+    "pk": 2 ,
+    "fields": {
+      "name": "Refactoring"
+    }
+  },
+  {
+    "model": "task.tasktype",
+    "pk": 3 ,
+    "fields": {
+      "name": "New feature"
+    }
+  },
+  {
+    "model": "task.tasktype",
+    "pk": 4 ,
+    "fields": {
+      "name": "Bug"
+    }
+  },
+  {
+    "model": "task.worker",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$390000$bhE45fDlQEFHdapI3GZben$2HvgghDnLCNUbmfzV8F3K8eFmcHusGtXmNOe5HkCXDo",
+      "last_login": "2022-08-08T14:14:03Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "Admin",
+      "last_name": "User",
+      "email": "admin.user@taxi.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2022-08-08T13:58:29Z",
+      "position": 1,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "task.worker",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$73Z1Y57bcoscZ37s9rE9v0$4SEQ0TtXwJKzO5/CRdFSrTifatiPjkZ38gM2H8Kqsdg=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "joyce.byers",
+      "first_name": "Joyce",
+      "last_name": "Byers",
+      "email": "joyce.byers@taxi.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-08T14:17:04Z",
+      "position": 2,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "task.worker",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$QtPol3T7x9quBj4BnbnVwW$UwT4kihkRfSvQEWEeuqVKwMgis2ikKVZfJDBcQMvOKY=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "jim.hopper",
+      "first_name": "Jim",
+      "last_name": "Hopper",
+      "email": "jim.hopper@taxi.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-08T14:19:09Z",
+      "position": 2,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "task.worker",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l1$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "jonathan.byers",
+      "first_name": "Jonathan",
+      "last_name": "Byers",
+      "email": "jonathan.byers@taxi.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-08T14:19:09Z",
+      "position": 4,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "task.worker",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l1$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "dustin.henderson",
+      "first_name": "Dustin",
+      "last_name": "Henderson",
+      "email": "dustin.henderson@taxi.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-09T14:19:09Z",
+      "position": 4,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "task.worker",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "mike.wheeler",
+      "first_name": "Mike",
+      "last_name": "Wheeler",
+      "email": "mike.wheeler@taxi.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-09T14:19:09Z",
+      "position": 2,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "task.worker",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "lucas.sinclair",
+      "first_name": "Lucas",
+      "last_name": "Sinclair",
+      "email": "lucas.sinclair@taxi.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-09T14:19:09Z",
+      "position": 3,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "task.worker",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "nancy.wheeler",
+      "first_name": "Nancy",
+      "last_name": "Wheeler",
+      "email": "nancy.wheeler@taxi.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-09T14:19:09Z",
+      "position": 3,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "task.worker",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "martin.brenner",
+      "first_name": "Martin",
+      "last_name": "Brenner",
+      "email": "martin.brenner@taxi.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-09T14:19:09Z",
+      "position": 5,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "task.worker",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "billy.hargrove",
+      "first_name": "Billy",
+      "last_name": "Hargrove",
+      "email": "billy.hargrove@taxi.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-09T14:19:09Z",
+      "position": 5,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+    {
+    "model": "task.worker",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$9yU0PLTDKlL02PedUtk2l2$LKjj8O1xGiPGEkDpjsHk87db1iLgt8dgDqECzcsivio",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "bob.newby",
+      "first_name": "Bob",
+      "last_name": "Newby",
+      "email": "bob.newby@taxi.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-08-09T14:19:09Z",
+      "position": 5,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "task.team",
+    "pk": 1,
+    "fields": {
+      "name": "Bob team",
+      "team": [
+       1, 2, 4, 6, 10
+      ]
+    }
+  },
+  {
+    "model": "task.team",
+    "pk": 2,
+    "fields": {
+      "name": "Joe team",
+      "team": [
+       3, 4, 5, 7, 8
+      ]
+    }
+  },
+  {
+    "model": "task.team",
+    "pk": 3,
+    "fields": {
+      "name": "Mike team",
+      "team": [
+       1, 7, 9, 8, 10
+      ]
+    }
+  },
+  {
+    "model": "task.project",
+    "pk": 1,
+    "fields": {
+      "name": "Taxi service",
+      "team": 1
+    }
+  },
+  {
+    "model": "task.project",
+    "pk": 2,
+    "fields": {
+      "name": "Library",
+      "team": 2
+    }
+  },
+  {
+    "model": "task.project",
+    "pk": 3,
+    "fields": {
+      "name": "Task manager",
+      "team": 1
+    }
+  }
+]
