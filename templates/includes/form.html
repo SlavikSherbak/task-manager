@@ -1,0 +1,11 @@
+{% load crispy_forms_filters %}
+
+<div class="card-body">
+  <form action="" method="post" id="{{ opts.model_name }}_form" novalidate>
+
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" class="btn btn-secondary mt-4" value="{{ object|yesno:"Edit,Create" }}">
+  </form>
+</div>
+

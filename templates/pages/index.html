@@ -1,0 +1,67 @@
+{% extends 'layouts/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container-fluid py-4">
+      <div class="row my-4">
+        <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+          <div class="card">
+            <div class="card-header pb-0">
+              <div class="row">
+                <div class="col-lg-6 col-7">
+                  <h6>You projects</h6>
+                </div>
+                <div class="col-lg-6 col-5 my-auto text-end">
+                  <a href="{%  url "task:project-create" %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                    <h6>Create project</h6>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+              <div class="table-responsive">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project name</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Team</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for project in projects_list %}
+                  {% if user in project.team.team.all %}
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <a href="{%  url "task:project-detail" pk=project.id %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                              <h6>{{ project.name }}</h6>
+                            </a>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">{{ project.team.name }}</h6>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  {% endif %}
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      {% include "includes/footer-fullscreen.html" %}
+    </div>
+{% endblock content %}
+
