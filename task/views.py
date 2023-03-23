@@ -193,38 +193,77 @@ class PriorityDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("task:additional-parameters")
 
 
+class PositionCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Position
+    fields = "__all__"
+    success_url = reverse_lazy("task:additional-parameters")
+
+
+class PositionUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Position
+    fields = "__all__"
+    success_url = reverse_lazy("task:additional-parameters")
+
+
+class PositionDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Position
+    success_url = reverse_lazy("task:additional-parameters")
+
+
+class TaskTypeCreateView(LoginRequiredMixin, generic.CreateView):
+    model = TaskType
+    fields = "__all__"
+    success_url = reverse_lazy("task:additional-parameters")
+
+
+class TaskTypeUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = TaskType
+    fields = "__all__"
+    success_url = reverse_lazy("task:additional-parameters")
+
+
+class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = TaskType
+    success_url = reverse_lazy("task:additional-parameters")
+
+
 # Authentication
 class UserLoginView(LoginView):
-  template_name = 'accounts/login.html'
-  form_class = LoginForm
+    template_name = 'accounts/login.html'
+    form_class = LoginForm
+
 
 def register(request):
-  if request.method == 'POST':
-    form = RegistrationForm(request.POST)
-    if form.is_valid():
-      form.save()
-      print('Account created successfully!')
-      return redirect('/accounts/login/')
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            print('Account created successfully!')
+            return redirect('/accounts/login/')
+        else:
+            print("Register failed!")
     else:
-      print("Register failed!")
-  else:
-    form = RegistrationForm()
+        form = RegistrationForm()
 
-  context = { 'form': form }
-  return render(request, 'accounts/register.html', context)
+    context = {'form': form}
+    return render(request, 'accounts/register.html', context)
+
 
 def logout_view(request):
-  logout(request)
-  return redirect('/accounts/login/')
+    logout(request)
+    return redirect('/accounts/login/')
+
 
 class UserPasswordResetView(PasswordResetView):
-  template_name = 'accounts/password_reset.html'
-  form_class = UserPasswordResetForm
+    template_name = 'accounts/password_reset.html'
+    form_class = UserPasswordResetForm
+
 
 class UserPasswordResetConfirmView(PasswordResetConfirmView):
-  template_name = 'accounts/password_reset_confirm.html'
-  form_class = UserSetPasswordForm
+    template_name = 'accounts/password_reset_confirm.html'
+    form_class = UserSetPasswordForm
+
 
 class UserPasswordChangeView(PasswordChangeView):
-  template_name = 'accounts/password_change.html'
-  form_class = UserPasswordChangeForm
+    template_name = 'accounts/password_change.html'
+    form_class = UserPasswordChangeForm

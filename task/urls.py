@@ -47,6 +47,12 @@ urlpatterns = [
     path("priority/create", PriorityCreateView.as_view(), name="priority-create"),
     path("priority/<int:pk>/update", PriorityUpdateView.as_view(), name="priority-update"),
     path("priority/<int:pk>/delete", PriorityDeleteView.as_view(), name="priority-delete"),
+    path("position/create", PositionCreateView.as_view(), name="position-create"),
+    path("position/<int:pk>/update", PositionUpdateView.as_view(), name="position-update"),
+    path("position/<int:pk>/delete", PositionDeleteView.as_view(), name="position-delete"),
+    path("task-type/create", TaskTypeCreateView.as_view(), name="task-type-create"),
+    path("task-type/<int:pk>/update", TaskTypeUpdateView.as_view(), name="task-type-update"),
+    path("task-type/<int:pk>/delete", TaskTypeDeleteView.as_view(), name="task-type-delete"),
 
     # Authentication
     path('accounts/login/', views.UserLoginView.as_view(), name='login'),
