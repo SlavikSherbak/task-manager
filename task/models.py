@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 
 class TaskType(models.Model):
@@ -34,22 +35,6 @@ class Priority(models.Model):
         return f"{self.name}"
 
 
-class Task(models.Model):
-    name = models.CharField(max_length=63, unique=True)
-    description = models.CharField(max_length=255)
-    deadline = models.DateTimeField()
-    is_completed = models.BooleanField(default=False)
-    priority = models.ForeignKey(Priority, on_delete=models.CASCADE)
-    task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
-    assignees = models.ManyToManyField(Worker, related_name="tasks", blank=True)
-
-    class Meta:
-        ordering = ["is_completed"]
-
-    def __str__(self) -> str:
-        return f"{self.name}, is completed {self.is_completed}"
-
-
 class Team(models.Model):
     name = models.CharField(max_length=64, default="New team")
     team = models.ManyToManyField(Worker, related_name="teams")
@@ -60,8 +45,31 @@ class Team(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=64, unique=True)
-    tasks = models.ManyToManyField(Task, related_name="projects", blank=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return reverse("task:project-detail", kwargs={"pk": self.pk})
 
     def __str__(self) -> str:
         return f"{self.name}"
+
+
+class Task(models.Model):
+    name = models.CharField(max_length=63, unique=True)
+    description = models.CharField(max_length=255)
+    deadline = models.DateTimeField()
+    is_completed = models.BooleanField(default=False)
+    priority = models.ForeignKey(Priority, on_delete=models.CASCADE)
+    task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
+    assignees = models.ManyToManyField(Worker, related_name="worker", blank=True, default=None)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None)
+
+    class Meta:
+        ordering = ["is_completed"]
+
+    def get_absolute_url(self):
+        return reverse("task:project-detail", kwargs={"pk": self.project.pk})
+
+    def __str__(self) -> str:
+        return f"{self.name}, is completed {self.is_completed}"
+
