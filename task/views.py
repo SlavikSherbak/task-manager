@@ -227,43 +227,67 @@ class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("task:additional-parameters")
 
 
+@login_required
+def profile(request):
+    projects = Project.objects.all()
+    tasks = Task.objects.filter(assignees__username__contains=request.user.username)
+
+    context = {
+        "tasks": tasks,
+        "projects": projects,
+        "segment": "profile",
+    }
+    return render(request, "pages/profile.html", context=context)
+
+
 # Authentication
 class UserLoginView(LoginView):
-    template_name = 'accounts/login.html'
+    template_name = "accounts/login.html"
     form_class = LoginForm
 
 
 def register(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            print('Account created successfully!')
-            return redirect('/accounts/login/')
+            print("Account created successfully!")
+            return redirect("/accounts/login/")
         else:
             print("Register failed!")
     else:
         form = RegistrationForm()
 
-    context = {'form': form}
-    return render(request, 'accounts/register.html', context)
+    context = {"form": form}
+    return render(request, "accounts/register.html", context)
 
 
 def logout_view(request):
     logout(request)
-    return redirect('/accounts/login/')
+    return HttpResponseRedirect(reverse_lazy("task:login"))
 
 
 class UserPasswordResetView(PasswordResetView):
-    template_name = 'accounts/password_reset.html'
+    template_name = "accounts/password_reset.html"
     form_class = UserPasswordResetForm
 
 
 class UserPasswordResetConfirmView(PasswordResetConfirmView):
-    template_name = 'accounts/password_reset_confirm.html'
+    template_name = "accounts/password_reset_confirm.html"
     form_class = UserSetPasswordForm
 
 
 class UserPasswordChangeView(PasswordChangeView):
-    template_name = 'accounts/password_change.html'
+    template_name = "accounts/password_change.html"
     form_class = UserPasswordChangeForm
+    success_url = reverse_lazy("task:profile")
+
+
+class WorkerProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Worker
+    fields = ("username", "first_name", "last_name", "email", "position")
+    template_name = "task/user_profile.html"
+    success_url = reverse_lazy("task:profile")
+
+    def get_object(self, queryset=None):
+        return self.request.user
