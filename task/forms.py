@@ -127,6 +127,19 @@ class DateTimeInput(forms.DateTimeInput):
 
 
 class TaskForm(forms.ModelForm):
+    PRIORITY_CHOICES = (
+        ('Urgent', 'Urgent'),
+        ('High', 'High'),
+        ('Middle', 'Middle'),
+        ('low', 'low'),
+    )
+
+    priority = forms.ChoiceField(
+        choices=PRIORITY_CHOICES,
+        widget=forms.RadioSelect(
+            attrs={'class': 'form-check-input'}
+        )
+    )
     deadline = forms.DateTimeField(widget=DateTimeInput)
     assignees = forms.ModelMultipleChoiceField(
         queryset=Worker.objects.all(),
