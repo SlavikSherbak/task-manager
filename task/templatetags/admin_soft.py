@@ -88,3 +88,15 @@ def sum_number(value, number):
 @register.filter
 def neg_num(value, number):
     return value - number
+
+
+@register.simple_tag()
+def query_transform(request, **kwargs):
+    updated = request.GET.copy()
+    for key, value in kwargs.items():
+        if key is not None:
+            updated[key] = value
+        else:
+            updated.pop(key, 0)
+
+    return updated.urlencode()
