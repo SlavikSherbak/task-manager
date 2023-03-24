@@ -51,7 +51,6 @@ class ProjectsListView(LoginRequiredMixin, generic.ListView):
 
 class ProjectsDetailView(LoginRequiredMixin, generic.DetailView):
     model = Project
-    template_name = "pages/tables.html"
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
