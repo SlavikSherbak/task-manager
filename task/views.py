@@ -77,6 +77,23 @@ class ProjectDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("task:index")
 
 
+class TaskListView(LoginRequiredMixin, generic.ListView):
+    model = Task
+    paginate_by = 6
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        pk = self.kwargs
+        for key, value in pk.items():
+            pk = value
+        project = Project.objects.get(pk=pk)
+
+        context["project"] = project
+        context["segment"] = "tables"
+        return context
+
+
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     form_class = TaskCreateForm
