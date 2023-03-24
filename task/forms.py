@@ -11,6 +11,13 @@ from django.utils.translation import gettext_lazy as _
 
 from task.models import Worker, Project, Task, Team
 
+PRIORITY_CHOICES = (
+    ('Urgent', 'Urgent'),
+    ('High', 'High'),
+    ('Middle', 'Middle'),
+    ('low', 'low'),
+)
+
 
 class RegistrationForm(UserCreationForm):
     password1 = forms.CharField(
@@ -126,14 +133,7 @@ class DateTimeInput(forms.DateTimeInput):
     input_type = "datetime-local"
 
 
-class TaskForm(forms.ModelForm):
-    PRIORITY_CHOICES = (
-        ('Urgent', 'Urgent'),
-        ('High', 'High'),
-        ('Middle', 'Middle'),
-        ('low', 'low'),
-    )
-
+class TaskUpdateForm(forms.ModelForm):
     priority = forms.ChoiceField(
         choices=PRIORITY_CHOICES,
         widget=forms.RadioSelect(
@@ -142,15 +142,42 @@ class TaskForm(forms.ModelForm):
     )
     deadline = forms.DateTimeField(widget=DateTimeInput)
     assignees = forms.ModelMultipleChoiceField(
-        queryset=Worker.objects.all(),
+        queryset=None,
         widget=forms.CheckboxSelectMultiple,
+        label="Assignees",
         required=False,
     )
 
     class Meta:
         model = Task
-        exclude = ["is_completed"]
+        exclude = ["is_completed", "project"]
         widgets = {"deadline": DateTimeInput()}
+
+    def __init__(self, project, *args, **kwargs):
+        project = Project.objects.get(id=project)
+        super().__init__(*args, **kwargs)
+        self.fields["assignees"].queryset = Worker.objects.filter(
+            teams=project.team
+        )
+
+
+class TaskCreateForm(forms.ModelForm):
+    priority = forms.ChoiceField(
+        choices=PRIORITY_CHOICES,
+        widget=forms.RadioSelect(
+            attrs={'class': 'form-check-input'}
+        )
+    )
+    deadline = forms.DateTimeField(widget=DateTimeInput)
+
+    class Meta:
+        model = Task
+        exclude = ["is_completed", "assignees"]
+        widgets = {"deadline": DateTimeInput()}
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['project'].queryset = Project.objects.filter(team__team=user)
 
 
 class TeamForm(forms.ModelForm):

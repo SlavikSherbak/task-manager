@@ -18,8 +18,9 @@ from task.forms import (
     UserSetPasswordForm,
     UserPasswordChangeForm,
     ProjectForm,
-    TaskForm,
     TeamForm,
+    TaskUpdateForm,
+    TaskCreateForm,
 )
 from django.contrib.auth import logout
 
@@ -86,12 +87,22 @@ class ProjectDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
-    form_class = TaskForm
+    form_class = TaskCreateForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Task
-    form_class = TaskForm
+    form_class = TaskUpdateForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["project"] = self.object.project.id
+        return kwargs
 
 
 class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
