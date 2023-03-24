@@ -24,15 +24,7 @@ from task.forms import (
 )
 from django.contrib.auth import logout
 
-from task.models import (
-    Project,
-    Task,
-    Worker,
-    Team,
-    Position,
-    TaskType,
-    Priority
-)
+from task.models import Project, Task, Worker, Team, Position, TaskType, Priority
 
 
 class ProjectsListView(LoginRequiredMixin, generic.ListView):
@@ -91,7 +83,7 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
+        kwargs["user"] = self.request.user
         return kwargs
 
 
@@ -240,9 +232,7 @@ class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
 @login_required
 def profile(request):
     projects = Project.objects.all()
-    tasks = Task.objects.filter(
-        assignees__username__contains=request.user.username
-    )
+    tasks = Task.objects.filter(assignees__username__contains=request.user.username)
 
     context = {
         "tasks": tasks,

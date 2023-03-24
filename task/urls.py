@@ -33,41 +33,17 @@ from task.views import (
 
 urlpatterns = [
     path("", ProjectsListView.as_view(), name="index"),
+    path("project/create/", ProjectCreateView.as_view(), name="project-create"),
     path(
-        "project/create/",
-        ProjectCreateView.as_view(),
-        name="project-create"
+        "project/<int:pk>/update/", ProjectUpdateView.as_view(), name="project-update"
     ),
     path(
-        "project/<int:pk>/update/",
-        ProjectUpdateView.as_view(),
-        name="project-update"
+        "project/<int:pk>/delete/", ProjectDeleteView.as_view(), name="project-delete"
     ),
-    path(
-        "project/<int:pk>/delete/",
-        ProjectDeleteView.as_view(),
-        name="project-delete"
-    ),
-    path(
-        "project/<int:pk>/",
-        ProjectsDetailView.as_view(),
-        name="project-detail"
-    ),
-    path(
-        "task/create/",
-        TaskCreateView.as_view(),
-        name="task-create"
-    ),
-    path(
-        "task/<int:pk>/update/",
-        TaskUpdateView.as_view(),
-        name="task-update"
-    ),
-    path(
-        "task/<int:pk>/delete/",
-        TaskDeleteView.as_view(),
-        name="task-delete"
-    ),
+    path("project/<int:pk>/", ProjectsDetailView.as_view(), name="project-detail"),
+    path("task/create/", TaskCreateView.as_view(), name="task-create"),
+    path("task/<int:pk>/update/", TaskUpdateView.as_view(), name="task-update"),
+    path("task/<int:pk>/delete/", TaskDeleteView.as_view(), name="task-delete"),
     path(
         "project/<int:pk>/task/<int:task_id>/toggle-assign-status/",
         toggle_mark_completed,
@@ -92,41 +68,21 @@ urlpatterns = [
         AdditionalParametersListView.as_view(),
         name="additional-parameters",
     ),
+    path("priority/create", PriorityCreateView.as_view(), name="priority-create"),
     path(
-        "priority/create",
-        PriorityCreateView.as_view(),
-        name="priority-create"
+        "priority/<int:pk>/update", PriorityUpdateView.as_view(), name="priority-update"
     ),
     path(
-        "priority/<int:pk>/update",
-        PriorityUpdateView.as_view(),
-        name="priority-update"
+        "priority/<int:pk>/delete", PriorityDeleteView.as_view(), name="priority-delete"
+    ),
+    path("position/create", PositionCreateView.as_view(), name="position-create"),
+    path(
+        "position/<int:pk>/update", PositionUpdateView.as_view(), name="position-update"
     ),
     path(
-        "priority/<int:pk>/delete",
-        PriorityDeleteView.as_view(),
-        name="priority-delete"
+        "position/<int:pk>/delete", PositionDeleteView.as_view(), name="position-delete"
     ),
-    path(
-        "position/create",
-        PositionCreateView.as_view(),
-        name="position-create"
-    ),
-    path(
-        "position/<int:pk>/update",
-        PositionUpdateView.as_view(),
-        name="position-update"
-    ),
-    path(
-        "position/<int:pk>/delete",
-        PositionDeleteView.as_view(),
-        name="position-delete"
-    ),
-    path(
-        "task-type/create",
-        TaskTypeCreateView.as_view(),
-        name="task-type-create"
-    ),
+    path("task-type/create", TaskTypeCreateView.as_view(), name="task-type-create"),
     path(
         "task-type/<int:pk>/update",
         TaskTypeUpdateView.as_view(),

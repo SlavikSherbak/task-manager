@@ -97,16 +97,14 @@ def get_app_list(context, order=True):
                 if perms.get("change", False) or perms.get("view", False):
                     try:
                         model_dict["admin_url"] = reverse(
-                            "admin:%s_%s_changelist" % info,
-                            current_app=admin_site.name
+                            "admin:%s_%s_changelist" % info, current_app=admin_site.name
                         )
                     except NoReverseMatch:
                         pass
                 if perms.get("add", False):
                     try:
                         model_dict["add_url"] = reverse(
-                            "admin:%s_%s_add" % info,
-                            current_app=admin_site.name
+                            "admin:%s_%s_add" % info, current_app=admin_site.name
                         )
                     except NoReverseMatch:
                         pass
@@ -153,9 +151,7 @@ def get_app_list(context, order=True):
 def get_admin_site(context):
     try:
         current_resolver = resolve(context.get("request").path)
-        index_resolver = resolve(reverse(
-            "%s:index" % current_resolver.namespaces[0]
-        ))
+        index_resolver = resolve(reverse("%s:index" % current_resolver.namespaces[0]))
 
         if hasattr(index_resolver.func, "admin_site"):
             return index_resolver.func.admin_site
@@ -219,10 +215,7 @@ def get_model_queryset(admin_site, model, request, preserved_filters=None):
         queryset = model.objects
 
     list_display = model_admin.get_list_display(request)
-    list_display_links = model_admin.get_list_display_links(
-        request,
-        list_display
-    )
+    list_display_links = model_admin.get_list_display_links(request, list_display)
     list_filter = model_admin.get_list_filter(request)
     search_fields = (
         model_admin.get_search_fields(request)
@@ -347,11 +340,7 @@ def get_menu_item_url(url, original_app_list):
             )
             return models[url["model"]]
         elif url_type == "reverse":
-            return reverse(
-                url["name"],
-                args=url.get("args"),
-                kwargs=url.get("kwargs")
-            )
+            return reverse(url["name"], args=url.get("args"), kwargs=url.get("kwargs"))
     elif isinstance(url, str):
         return url
 
@@ -359,10 +348,7 @@ def get_menu_item_url(url, original_app_list):
 def get_menu_items(context):
     pinned_apps = []
     original_app_list = OrderedDict(
-        map(
-            lambda app: (app["app_label"], app),
-            get_original_menu_items(context)
-        )
+        map(lambda app: (app["app_label"], app), get_original_menu_items(context))
     )
     custom_app_list = None
     custom_app_list_deprecated = None
@@ -423,10 +409,7 @@ def get_menu_items(context):
                             "at least have 'label' or 'app_label' key"
                         )
                     )
-                app_label = "custom_%s" % slugify(
-                    data["label"],
-                    allow_unicode=True
-                )
+                app_label = "custom_%s" % slugify(data["label"], allow_unicode=True)
 
             if app_label in original_app_list:
                 item = original_app_list[app_label].copy()
@@ -438,10 +421,7 @@ def get_menu_items(context):
 
             if "items" in data:
                 item["items"] = list(
-                    map(
-                        lambda x: get_menu_item_app_model(app_label, x),
-                        data["items"]
-                    )
+                    map(lambda x: get_menu_item_app_model(app_label, x), data["items"])
                 )
 
             if "url" in data:

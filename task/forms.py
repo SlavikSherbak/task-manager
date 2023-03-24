@@ -12,10 +12,10 @@ from django.utils.translation import gettext_lazy as _
 from task.models import Worker, Project, Task, Team
 
 PRIORITY_CHOICES = (
-    ('Urgent', 'Urgent'),
-    ('High', 'High'),
-    ('Middle', 'Middle'),
-    ('low', 'low'),
+    ("Urgent", "Urgent"),
+    ("High", "High"),
+    ("Middle", "Middle"),
+    ("low", "low"),
 )
 
 
@@ -29,10 +29,7 @@ class RegistrationForm(UserCreationForm):
     password2 = forms.CharField(
         label=_("Password Confirmation"),
         widget=forms.PasswordInput(
-            attrs={
-                "class": "form-control",
-                "placeholder": "Password Confirmation"
-            }
+            attrs={"class": "form-control", "placeholder": "Password Confirmation"}
         ),
     )
 
@@ -71,9 +68,7 @@ class LoginForm(AuthenticationForm):
 
 
 class UserPasswordResetForm(PasswordResetForm):
-    email = forms.EmailField(
-        widget=forms.EmailInput(attrs={"class": "form-control"})
-    )
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-control"}))
 
 
 class UserSetPasswordForm(SetPasswordForm):
@@ -87,10 +82,7 @@ class UserSetPasswordForm(SetPasswordForm):
     new_password2 = forms.CharField(
         max_length=50,
         widget=forms.PasswordInput(
-            attrs={
-                "class": "form-control",
-                "placeholder": "Confirm New Password"
-            }
+            attrs={"class": "form-control", "placeholder": "Confirm New Password"}
         ),
         label="Confirm New Password",
     )
@@ -114,10 +106,7 @@ class UserPasswordChangeForm(PasswordChangeForm):
     new_password2 = forms.CharField(
         max_length=50,
         widget=forms.PasswordInput(
-            attrs={
-                "class": "form-control",
-                "placeholder": "Confirm New Password"
-            }
+            attrs={"class": "form-control", "placeholder": "Confirm New Password"}
         ),
         label="Confirm New Password",
     )
@@ -136,9 +125,7 @@ class DateTimeInput(forms.DateTimeInput):
 class TaskUpdateForm(forms.ModelForm):
     priority = forms.ChoiceField(
         choices=PRIORITY_CHOICES,
-        widget=forms.RadioSelect(
-            attrs={'class': 'form-check-input'}
-        )
+        widget=forms.RadioSelect(attrs={"class": "form-check-input"}),
     )
     deadline = forms.DateTimeField(widget=DateTimeInput)
     assignees = forms.ModelMultipleChoiceField(
@@ -156,17 +143,13 @@ class TaskUpdateForm(forms.ModelForm):
     def __init__(self, project, *args, **kwargs):
         project = Project.objects.get(id=project)
         super().__init__(*args, **kwargs)
-        self.fields["assignees"].queryset = Worker.objects.filter(
-            teams=project.team
-        )
+        self.fields["assignees"].queryset = Worker.objects.filter(teams=project.team)
 
 
 class TaskCreateForm(forms.ModelForm):
     priority = forms.ChoiceField(
         choices=PRIORITY_CHOICES,
-        widget=forms.RadioSelect(
-            attrs={'class': 'form-check-input'}
-        )
+        widget=forms.RadioSelect(attrs={"class": "form-check-input"}),
     )
     deadline = forms.DateTimeField(widget=DateTimeInput)
 
@@ -177,7 +160,7 @@ class TaskCreateForm(forms.ModelForm):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['project'].queryset = Project.objects.filter(team__team=user)
+        self.fields["project"].queryset = Project.objects.filter(team__team=user)
 
 
 class TeamForm(forms.ModelForm):
