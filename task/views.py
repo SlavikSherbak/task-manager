@@ -281,6 +281,23 @@ class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("task:additional-parameters")
 
 
+class UserAllTaskList(LoginRequiredMixin, generic.ListView):
+    model = Task
+    paginate_by = 7
+    template_name = "task/user_all_tasks.html"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["segment"] = "user_tasks"
+        return context
+
+    def get_queryset(self):
+        queryset = Task.objects.select_related("task_type").select_related("project")
+
+        return queryset
+
+
 @login_required
 def profile(request):
     projects = Project.objects.all()

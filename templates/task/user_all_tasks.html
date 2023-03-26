@@ -1,0 +1,68 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="row">
+    <h4 class="mb-0 col-8 text-center">Tasks</h4>
+    <a class="btn btn-link text-dark mb-0 col-4 d-inline-block text-end" href="{% url "task:task-create" %}"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Create task</a>
+
+  </div>
+
+  <div class="row d-flex mb-4 p-3">
+    {% for task in task_list %}
+      {% if user in task.project.team.team.all %}
+        <div class="col-12 col-xl-4 mb-4">
+        <div class="card h-100 max-width-450">
+            <div class="card-header pb-0 p-3">
+              <div class="row">
+                <div class="col-md-8 d-flex">
+                  <h6 class="mb-0">{{ task.name }}</h6>
+                </div>
+                <div class="col-md-4 text-end">
+                  <a href="{% url "task:task-update" pk=task.pk %}">
+                    <i class="fas fa-user-edit text-secondary text-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Task"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-2">
+              <p class="text-sm">
+                {{ task.description }}
+              </p>
+              <hr class="horizontal gray-light my-4">
+              <ul class="list-group">
+                <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Deadline:</strong> &nbsp; {{ task.deadline }}</li>
+                <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Priority:</strong> &nbsp; {{ task.priority }}</li>
+
+                <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Type:</strong> &nbsp; {{ task.task_type.name }}</li>
+                <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Project:</strong> &nbsp; {{ task.project.name  }}</li>
+                <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Team:</strong> &nbsp; {{ task.project.team.name  }}</li>
+                <li class="list-group-item border-0 ps-0 pb-0">
+                  <strong class="text-dark text-sm">Status:</strong> &nbsp;
+                    {% if task.is_completed %}
+                        Completed ✅
+                      {% else %}
+                        <span class="text-danger">
+                          Not completed
+                        </span>
+                    {% endif %}
+                  <span>
+                      {% if not task.is_completed %}
+                        <br><span class="d-inline-block">
+                          <a href="{% url "task:toggle_mark_completed" pk=task.project.id task_id=task.pk %}" class="text-success">Solved</a>
+                        </span>
+
+                      {% endif %}
+                  </span>
+                </li>
+                </ul>
+            </div>
+          </div>
+      </div>
+        {% else %}
+      {% endif %}
+    {% endfor %}
+      {% include "includes/pagination.html" %}
+  </div>
+</div>
+{% endblock %}

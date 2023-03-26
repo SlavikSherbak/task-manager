@@ -25,7 +25,7 @@ from task.views import (
     TaskTypeUpdateView,
     TaskTypeCreateView,
     WorkerProfileUpdateView,
-    TaskListView,
+    TaskListView, UserAllTaskList,
 )
 
 urlpatterns = [
@@ -41,6 +41,7 @@ urlpatterns = [
     path("project/task_list/<int:pk>/", TaskListView.as_view(), name="task-list"),
     path("task/<int:pk>/update/", TaskUpdateView.as_view(), name="task-update"),
     path("task/<int:pk>/delete/", TaskDeleteView.as_view(), name="task-delete"),
+    path("user/task/", UserAllTaskList.as_view(), name="user-task-list"),
     path(
         "project/<int:pk>/task/<int:task_id>/toggle-assign-status/",
         toggle_mark_completed,
