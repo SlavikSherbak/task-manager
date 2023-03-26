@@ -117,6 +117,10 @@ class ProjectForm(forms.ModelForm):
         model = Project
         exclude = ["tasks"]
 
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["team"].queryset = Team.objects.filter(team=user)
+
 
 class DateTimeInput(forms.DateTimeInput):
     input_type = "datetime-local"

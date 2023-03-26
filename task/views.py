@@ -79,28 +79,15 @@ class ProjectsListView(LoginRequiredMixin, generic.ListView):
         return queryset
 
 
-# class ProjectsDetailView(LoginRequiredMixin, generic.DetailView):
-#     model = Project
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#
-#         pk = self.kwargs
-#         for key, value in pk.items():
-#             pk = value
-#         project = Project.objects.get(pk=pk)
-#
-#         tasks = Task.objects.filter(project=project.id)
-#
-#         context["tasks"] = tasks
-#         context["segment"] = "tables"
-#         return context
-
-
 class ProjectCreateView(LoginRequiredMixin, generic.CreateView):
     model = Project
     form_class = ProjectForm
     success_url = reverse_lazy("task:index")
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
 
 class ProjectUpdateView(LoginRequiredMixin, generic.UpdateView):
