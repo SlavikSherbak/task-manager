@@ -35,7 +35,7 @@ class RegistrationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = Worker
-        fields = ("username", "email", "position")
+        fields = ("username", "first_name", "last_name", "email", "position", )
 
         widgets = {
             "username": forms.TextInput(
@@ -48,6 +48,12 @@ class RegistrationForm(UserCreationForm):
                 attrs={
                     "class": "form-select",
                 }
+            ),
+            "first_name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "First name"}
+            ),
+            "last_name": forms.EmailInput(
+                attrs={"class": "form-control", "placeholder": "Last name"}
             ),
         }
 
