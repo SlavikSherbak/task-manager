@@ -70,7 +70,7 @@ class Task(models.Model):
         ordering = ["is_completed"]
 
     def get_absolute_url(self):
-        return reverse("task:project-detail", kwargs={"pk": self.project.pk})
+        return reverse("task:task-list", kwargs={"pk": self.project.id})
 
     def __str__(self) -> str:
         return f"{self.name}, is completed {self.is_completed}"

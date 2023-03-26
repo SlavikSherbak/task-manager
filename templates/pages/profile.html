@@ -99,7 +99,7 @@
                           <td>
                             <div class="d-flex px-2 py-1">
                               <div class="d-flex flex-column justify-content-center">
-                                <a href="{%  url "task:project-detail" pk=project.id %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                <a href="{%  url "task:task-list" pk=project.id %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                   <h6>{{ project.name }}</h6>
                                 </a>
                               </div>
@@ -137,7 +137,7 @@
                 <hr class="horizontal gray-light my-4">
                 <ul class="list-group">
                   <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Deadline:</strong> &nbsp; {{ task.deadline }}</li>
-                  <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Priority:</strong> &nbsp; {{ task.priority.name }}</li>
+                  <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Priority:</strong> &nbsp; {{ task.priority }}</li>
                   <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Type:</strong> &nbsp; {{ task.task_type.name }}</li>
                   <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Performer:</strong> &nbsp;
                     {% if task.assignees %}
