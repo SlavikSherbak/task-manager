@@ -21,7 +21,9 @@ from task.forms import (
     ProjectForm,
     TeamForm,
     TaskUpdateForm,
-    TaskCreateForm, TaskSearchForm, ProjectSearchForm,
+    TaskCreateForm,
+    TaskSearchForm,
+    ProjectSearchForm,
 )
 from django.contrib.auth import logout
 
@@ -137,6 +139,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
             Task.objects.select_related("task_type").
             select_related("project")
             .filter(project=self.kwargs["pk"])
+            .filter(is_completed=False)
         )
         form = TaskSearchForm(self.request.GET)
 

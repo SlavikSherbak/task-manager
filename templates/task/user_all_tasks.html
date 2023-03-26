@@ -3,9 +3,7 @@
 {% block content %}
 <div class="container-fluid py-4">
   <div class="row">
-    <h4 class="mb-0 col-8 text-center">Tasks</h4>
-    <a class="btn btn-link text-dark mb-0 col-4 d-inline-block text-end" href="{% url "task:task-create" %}"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Create task</a>
-
+    <h4 class="mb-0 col-12 text-center">Tasks</h4>
   </div>
 
   <div class="row d-flex mb-4 p-3">
@@ -48,8 +46,8 @@
                     {% endif %}
                   <span>
                       {% if not task.is_completed %}
-                        <br><span class="d-inline-block">
-                          <a href="{% url "task:toggle_mark_completed" pk=task.project.id task_id=task.pk %}" class="text-success">Solved</a>
+                        <br><span class="">
+                          <a href="{% url "task:toggle_mark_completed" pk=task.project.id task_id=task.pk %}" class="m-2 btn btn-success">Solved</a>
                         </span>
 
                       {% endif %}
