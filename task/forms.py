@@ -122,6 +122,15 @@ class DateTimeInput(forms.DateTimeInput):
     input_type = "datetime-local"
 
 
+class ProjectSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by name..."})
+    )
+
+
 class TaskUpdateForm(forms.ModelForm):
     priority = forms.ChoiceField(
         choices=PRIORITY_CHOICES,

@@ -21,7 +21,7 @@ from task.forms import (
     ProjectForm,
     TeamForm,
     TaskUpdateForm,
-    TaskCreateForm, TaskSearchForm,
+    TaskCreateForm, TaskSearchForm, ProjectSearchForm,
 )
 from django.contrib.auth import logout
 
@@ -39,9 +39,25 @@ class ProjectsListView(LoginRequiredMixin, generic.ListView):
 
         tasks = Task.objects.exclude(is_completed=True)
 
+        name = self.request.GET.get("name", "")
+
+        context["search_form"] = ProjectSearchForm(
+            initial={"name": name}
+        )
+
         context["tasks"] = tasks
         context["segment"] = "index"
         return context
+
+    def get_queryset(self):
+        queryset = Project.objects.all()
+        form = ProjectSearchForm(self.request.GET)
+
+        if form.is_valid():
+            return queryset.filter(
+                name__icontains=form.cleaned_data["name"]
+            )
+        return queryset
 
 
 # class ProjectsDetailView(LoginRequiredMixin, generic.DetailView):

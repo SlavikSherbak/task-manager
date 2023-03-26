@@ -10,10 +10,13 @@
           <div class="card">
             <div class="card-header pb-0">
               <div class="row">
-                <div class="col-lg-6 col-7">
+                <div class="col-lg-4 col-12">
                   <h6>You projects</h6>
                 </div>
-                <div class="col-lg-6 col-5 my-auto text-end">
+                <div class="col-lg-4 col-12">
+                  {% include "includes/search_form.html" %}
+                </div>
+                <div class="col-lg-4 col-12 my-auto text-end">
                   <a href="{%  url "task:project-create" %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                     <h6>Create project</h6>
                   </a>
