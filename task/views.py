@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.views import (
@@ -20,7 +21,7 @@ from task.forms import (
     ProjectForm,
     TeamForm,
     TaskUpdateForm,
-    TaskCreateForm,
+    TaskCreateForm, TaskSearchForm,
 )
 from django.contrib.auth import logout
 
@@ -31,6 +32,7 @@ class ProjectsListView(LoginRequiredMixin, generic.ListView):
     model = Project
     context_object_name = "projects_list"
     template_name = "pages/index.html"
+    paginate_by = 6
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -42,22 +44,22 @@ class ProjectsListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-class ProjectsDetailView(LoginRequiredMixin, generic.DetailView):
-    model = Project
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        pk = self.kwargs
-        for key, value in pk.items():
-            pk = value
-        project = Project.objects.get(pk=pk)
-
-        tasks = Task.objects.filter(project=project.id)
-
-        context["tasks"] = tasks
-        context["segment"] = "tables"
-        return context
+# class ProjectsDetailView(LoginRequiredMixin, generic.DetailView):
+#     model = Project
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#
+#         pk = self.kwargs
+#         for key, value in pk.items():
+#             pk = value
+#         project = Project.objects.get(pk=pk)
+#
+#         tasks = Task.objects.filter(project=project.id)
+#
+#         context["tasks"] = tasks
+#         context["segment"] = "tables"
+#         return context
 
 
 class ProjectCreateView(LoginRequiredMixin, generic.CreateView):
@@ -89,9 +91,25 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
             pk = value
         project = Project.objects.get(pk=pk)
 
+        name = self.request.GET.get("name", "")
+
+        context["search_form"] = TaskSearchForm(
+            initial={"name": name}
+        )
+
         context["project"] = project
         context["segment"] = "tables"
         return context
+
+    def get_queryset(self) -> QuerySet:
+        queryset = Task.objects.select_related("task_type").select_related("project")
+        form = TaskSearchForm(self.request.GET)
+
+        if form.is_valid():
+            return queryset.filter(
+                name__icontains=form.cleaned_data["name"]
+            )
+        return queryset
 
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):

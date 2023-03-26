@@ -163,6 +163,15 @@ class TaskCreateForm(forms.ModelForm):
         self.fields["project"].queryset = Project.objects.filter(team__team=user)
 
 
+class TaskSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by title..."})
+    )
+
+
 class TeamForm(forms.ModelForm):
     team = forms.ModelMultipleChoiceField(
         queryset=Worker.objects.all(),
