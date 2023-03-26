@@ -25,7 +25,15 @@ from task.forms import (
 )
 from django.contrib.auth import logout
 
-from task.models import Project, Task, Worker, Team, Position, TaskType, Priority
+from task.models import (
+    Project,
+    Task,
+    Worker,
+    Team,
+    Position,
+    TaskType,
+    Priority
+)
 
 
 class ProjectsListView(LoginRequiredMixin, generic.ListView):
@@ -102,23 +110,25 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        pk = self.kwargs
-        for key, value in pk.items():
-            pk = value
-        project = Project.objects.get(pk=pk)
-
+        project = Project.objects.get(pk=self.kwargs["pk"])
         name = self.request.GET.get("name", "")
 
         context["search_form"] = TaskSearchForm(
             initial={"name": name}
         )
 
+        self.get_queryset().filter(project=project)
+
         context["project"] = project
         context["segment"] = "tables"
         return context
 
     def get_queryset(self) -> QuerySet:
-        queryset = Task.objects.select_related("task_type").select_related("project")
+        queryset = (
+            Task.objects.select_related("task_type").
+            select_related("project")
+            .filter(project=self.kwargs["pk"])
+        )
         form = TaskSearchForm(self.request.GET)
 
         if form.is_valid():
@@ -159,7 +169,7 @@ def toggle_mark_completed(request, pk, task_id):
     if not task.is_completed:
         task.is_completed = True
         task.save()
-    return HttpResponseRedirect(reverse_lazy("task:project-detail", args=[pk]))
+    return HttpResponseRedirect(reverse_lazy("task:task-list", args=[pk]))
 
 
 @login_required
@@ -170,7 +180,7 @@ def toggle_assign_to_task(request, pk, task_id):
         task.assignees.remove(worker)
     else:
         task.assignees.add(worker)
-    return HttpResponseRedirect(reverse_lazy("task:project-detail", args=[pk]))
+    return HttpResponseRedirect(reverse_lazy("task:task-list", args=[pk]))
 
 
 @login_required
@@ -283,7 +293,11 @@ class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
 @login_required
 def profile(request):
     projects = Project.objects.all()
-    tasks = Task.objects.filter(assignees__username__contains=request.user.username)
+    tasks = (
+        Task.objects.filter(
+            assignees__username__contains=request.user.username
+        )
+    )
 
     context = {
         "tasks": tasks,
