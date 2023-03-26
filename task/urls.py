@@ -4,7 +4,6 @@ from django.contrib.auth import views as auth_views
 
 from task.views import (
     ProjectsListView,
-    ProjectsDetailView,
     ProjectCreateView,
     ProjectUpdateView,
     ProjectDeleteView,
@@ -41,9 +40,8 @@ urlpatterns = [
     path(
         "project/<int:pk>/delete/", ProjectDeleteView.as_view(), name="project-delete"
     ),
-    path("project/<int:pk>/", ProjectsDetailView.as_view(), name="project-detail"),
     path("task/create/", TaskCreateView.as_view(), name="task-create"),
-    path("project/lask_list/<int:pk>/", TaskListView.as_view(), name="task-list"),
+    path("project/task_list/<int:pk>/", TaskListView.as_view(), name="task-list"),
     path("task/<int:pk>/update/", TaskUpdateView.as_view(), name="task-update"),
     path("task/<int:pk>/delete/", TaskDeleteView.as_view(), name="task-delete"),
     path(
