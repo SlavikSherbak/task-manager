@@ -44,20 +44,30 @@ class ProjectsListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        tasks = Task.objects.exclude(is_completed=True)
-
         name = self.request.GET.get("name", "")
 
         context["search_form"] = ProjectSearchForm(
             initial={"name": name}
         )
 
-        context["tasks"] = tasks
+        count_user_project = self.get_queryset()
+
+        tasks_to_do = []
+        for project in count_user_project:
+            tasks = Task.objects.filter(project=project)
+            count_task = tasks.count()
+            task_completed = tasks.filter(is_completed=True).count()
+
+            tasks_to_do.append(int(round((task_completed / count_task) * 100, 0)))
+
+        context["tasks_to_do"] = tasks_to_do
         context["segment"] = "index"
         return context
 
     def get_queryset(self):
-        queryset = Project.objects.all()
+        username = self.request.user.username
+
+        queryset = Project.objects.select_related("team").filter(team__team__username=username)
         form = ProjectSearchForm(self.request.GET)
 
         if form.is_valid():
