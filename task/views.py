@@ -32,7 +32,6 @@ from task.models import (
     Team,
     Position,
     TaskType,
-    Priority
 )
 
 
@@ -227,33 +226,15 @@ class TeamDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class AdditionalParametersListView(LoginRequiredMixin, generic.ListView):
-    model = Priority
+    model = Position
     template_name = "task/additional-parameters.html"
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
 
         context["task_types"] = TaskType.objects.all()
-        context["positions"] = Position.objects.all()
         context["segment"] = "additional-parameters"
         return context
-
-
-class PriorityCreateView(LoginRequiredMixin, generic.CreateView):
-    model = Priority
-    fields = "__all__"
-    success_url = reverse_lazy("task:additional-parameters")
-
-
-class PriorityUpdateView(LoginRequiredMixin, generic.UpdateView):
-    model = Priority
-    fields = "__all__"
-    success_url = reverse_lazy("task:additional-parameters")
-
-
-class PriorityDeleteView(LoginRequiredMixin, generic.DeleteView):
-    model = Priority
-    success_url = reverse_lazy("task:additional-parameters")
 
 
 class PositionCreateView(LoginRequiredMixin, generic.CreateView):

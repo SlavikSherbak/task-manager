@@ -18,9 +18,6 @@ from task.views import (
     toggle_remove_worker_from_team,
     TeamCreateView,
     AdditionalParametersListView,
-    PriorityCreateView,
-    PriorityUpdateView,
-    PriorityDeleteView,
     PositionCreateView,
     PositionUpdateView,
     PositionDeleteView,
@@ -67,13 +64,6 @@ urlpatterns = [
         "additional-parameters/",
         AdditionalParametersListView.as_view(),
         name="additional-parameters",
-    ),
-    path("priority/create", PriorityCreateView.as_view(), name="priority-create"),
-    path(
-        "priority/<int:pk>/update", PriorityUpdateView.as_view(), name="priority-update"
-    ),
-    path(
-        "priority/<int:pk>/delete", PriorityDeleteView.as_view(), name="priority-delete"
     ),
     path("position/create", PositionCreateView.as_view(), name="position-create"),
     path(

@@ -28,13 +28,6 @@ class Worker(AbstractUser):
         )
 
 
-class Priority(models.Model):
-    name = models.CharField(max_length=64)
-
-    def __str__(self) -> str:
-        return f"{self.name}"
-
-
 class Team(models.Model):
     name = models.CharField(max_length=64, default="New team")
     team = models.ManyToManyField(Worker, related_name="teams")
