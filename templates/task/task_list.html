@@ -18,6 +18,7 @@
   </div>
 
   <div class="row d-flex mb-4">
+  {% if task_list %}
     {% for task in task_list %}
         <div class="col-12 col-xl-4 mb-3 px-1">
         <div class="card h-100 max-width-500 p-2">
@@ -84,7 +85,15 @@
           </div>
       </div>
 
+
+
     {% endfor %}
+  {% else %}
+    <div class="m-4">
+      <h4 class="text-center">There is not tasks here.  <a class="btn btn-link text-dark mb-0 d-inline-block text-end" href="{% url "task:task-create" %}"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Create task</a>
+      </h4>
+    </div>
+  {% endif %}
     {% include "includes/pagination.html" %}
   </div>
   <div class="row">
