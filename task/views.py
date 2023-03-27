@@ -52,15 +52,16 @@ class ProjectsListView(LoginRequiredMixin, generic.ListView):
             initial={"name": name}
         )
 
-        count_user_project = self.get_queryset()
-
         context["segment"] = "index"
         return context
 
     def get_queryset(self):
         username = self.request.user.username
 
-        queryset = Project.objects.select_related("team").filter(team__team__username=username)
+        queryset = (
+            Project.objects.select_related("team")
+            .filter(team__team__username=username)
+        )
         form = ProjectSearchForm(self.request.GET)
 
         if form.is_valid():
@@ -278,7 +279,11 @@ class UserAllTaskList(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = Task.objects.select_related("task_type").select_related("project").filter(assignees=self.request.user)
+        queryset = (
+            Task.objects.select_related("task_type")
+            .select_related("project")
+            .filter(assignees=self.request.user)
+        )
 
         return queryset
 

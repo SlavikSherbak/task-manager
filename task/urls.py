@@ -30,17 +30,36 @@ from task.views import (
 
 urlpatterns = [
     path("", ProjectsListView.as_view(), name="index"),
-    path("project/create/", ProjectCreateView.as_view(), name="project-create"),
+    path("project/create/",
+         ProjectCreateView.as_view(),
+         name="project-create"
+         ),
     path(
-        "project/<int:pk>/update/", ProjectUpdateView.as_view(), name="project-update"
+        "project/<int:pk>/update/",
+        ProjectUpdateView.as_view(),
+        name="project-update"
     ),
     path(
-        "project/<int:pk>/delete/", ProjectDeleteView.as_view(), name="project-delete"
+        "project/<int:pk>/delete/",
+        ProjectDeleteView.as_view(),
+        name="project-delete"
     ),
     path("task/create/", TaskCreateView.as_view(), name="task-create"),
-    path("project/task_list/<int:pk>/", TaskListView.as_view(), name="task-list"),
-    path("task/<int:pk>/update/", TaskUpdateView.as_view(), name="task-update"),
-    path("task/<int:pk>/delete/", TaskDeleteView.as_view(), name="task-delete"),
+    path(
+        "project/task_list/<int:pk>/",
+        TaskListView.as_view(),
+        name="task-list"
+    ),
+    path(
+        "task/<int:pk>/update/",
+        TaskUpdateView.as_view(),
+        name="task-update"
+    ),
+    path(
+        "task/<int:pk>/delete/",
+        TaskDeleteView.as_view(),
+        name="task-delete"
+    ),
     path("user/task/", UserAllTaskList.as_view(), name="user-task-list"),
     path(
         "project/<int:pk>/task/<int:task_id>/toggle-assign-status/",
@@ -66,14 +85,26 @@ urlpatterns = [
         AdditionalParametersListView.as_view(),
         name="additional-parameters",
     ),
-    path("position/create", PositionCreateView.as_view(), name="position-create"),
     path(
-        "position/<int:pk>/update", PositionUpdateView.as_view(), name="position-update"
+        "position/create",
+        PositionCreateView.as_view(),
+        name="position-create"
     ),
     path(
-        "position/<int:pk>/delete", PositionDeleteView.as_view(), name="position-delete"
+        "position/<int:pk>/update",
+        PositionUpdateView.as_view(),
+        name="position-update"
     ),
-    path("task-type/create", TaskTypeCreateView.as_view(), name="task-type-create"),
+    path(
+        "position/<int:pk>/delete",
+        PositionDeleteView.as_view(),
+        name="position-delete"
+    ),
+    path(
+        "task-type/create",
+        TaskTypeCreateView.as_view(),
+        name="task-type-create"
+    ),
     path(
         "task-type/<int:pk>/update",
         TaskTypeUpdateView.as_view(),

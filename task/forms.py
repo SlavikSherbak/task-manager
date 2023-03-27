@@ -29,7 +29,10 @@ class RegistrationForm(UserCreationForm):
     password2 = forms.CharField(
         label=_("Password Confirmation"),
         widget=forms.PasswordInput(
-            attrs={"class": "form-control", "placeholder": "Password Confirmation"}
+            attrs={
+                "class": "form-control",
+                "placeholder": "Password Confirmation"
+            }
         ),
     )
 
@@ -74,7 +77,11 @@ class LoginForm(AuthenticationForm):
 
 
 class UserPasswordResetForm(PasswordResetForm):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-control"}))
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            "class": "form-control"
+        })
+    )
 
 
 class UserSetPasswordForm(SetPasswordForm):
@@ -88,7 +95,10 @@ class UserSetPasswordForm(SetPasswordForm):
     new_password2 = forms.CharField(
         max_length=50,
         widget=forms.PasswordInput(
-            attrs={"class": "form-control", "placeholder": "Confirm New Password"}
+            attrs={
+                "class": "form-control",
+                "placeholder": "Confirm New Password"
+            }
         ),
         label="Confirm New Password",
     )
@@ -112,7 +122,10 @@ class UserPasswordChangeForm(PasswordChangeForm):
     new_password2 = forms.CharField(
         max_length=50,
         widget=forms.PasswordInput(
-            attrs={"class": "form-control", "placeholder": "Confirm New Password"}
+            attrs={
+                "class": "form-control",
+                "placeholder": "Confirm New Password"
+            }
         ),
         label="Confirm New Password",
     )
@@ -162,7 +175,9 @@ class TaskUpdateForm(forms.ModelForm):
     def __init__(self, project, *args, **kwargs):
         project = Project.objects.get(id=project)
         super().__init__(*args, **kwargs)
-        self.fields["assignees"].queryset = Worker.objects.filter(teams=project.team)
+        self.fields["assignees"].queryset = (
+            Worker.objects.filter(teams=project.team)
+        )
 
 
 class TaskCreateForm(forms.ModelForm):
@@ -185,8 +200,14 @@ class TaskCreateForm(forms.ModelForm):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        project = self.fields["project"].queryset = Project.objects.filter(team__team=user)
-        self.fields["assignees"].queryset = Worker.objects.filter(teams__project=project.get(team__team=user))
+        project = self.fields["project"].queryset = (
+            Project.objects.filter(team__team=user)
+        )
+        self.fields["assignees"].queryset = (
+            Worker.objects.filter(
+                teams__project=project.get(team__team=user)
+            )
+        )
 
 
 class TaskSearchForm(forms.Form):

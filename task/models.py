@@ -57,7 +57,11 @@ class Task(models.Model):
     assignees = models.ManyToManyField(
         Worker, related_name="worker", blank=True, default=None
     )
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, default=None)
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        default=None
+    )
 
     class Meta:
         ordering = ["is_completed"]
