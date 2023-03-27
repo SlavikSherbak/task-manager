@@ -30,12 +30,10 @@
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project name</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Team</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Completed</th>
                     </tr>
                   </thead>
                   <tbody>
                   {% for project in projects_list %}
-                  {% for count_tasks in tasks_to_do %}
                   {% if user in project.team.team.all %}
                     <tr>
                       <td>
@@ -54,22 +52,9 @@
                           </div>
                         </div>
                       </td>
-                      <td>
-                        <div class="progress-wrapper w-75 mx-2">
-                          <div class="progress-info">
-                            <div class="progress-percentage">
-                              <span class="text-xs font-weight-bold">{{ count_tasks }}%</span>
-                            </div>
-                          </div>
-                          <div class="progress">
-                            <div class="progress-bar {% if count_tasks < 100 %}bg-gradient-info{% else %}bg-gradient-success{% endif %} " role="progressbar" style="width: {{ count_tasks }}%" aria-valuenow="{{ count_tasks }}" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                        </div>
-                      </td>
                     </tr>
                   {% endif %}
                     {% include "includes/pagination.html" %}
-                  {% endfor %}
                   {% endfor %}
                   </tbody>
                 </table>
