@@ -52,7 +52,7 @@ class RegistrationForm(UserCreationForm):
             "first_name": forms.TextInput(
                 attrs={"class": "form-control", "placeholder": "First name"}
             ),
-            "last_name": forms.EmailInput(
+            "last_name": forms.TextInput(
                 attrs={"class": "form-control", "placeholder": "Last name"}
             ),
         }
