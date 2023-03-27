@@ -7,7 +7,7 @@
     <h4 class="mb-0 px-5">Your teams</h4>
     <a class="btn btn-link text-dark text-sm px-6" href="{% url "task:team-create" %}"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Create team</a>
   </div>
-  <div class="row d-flex m-2">
+  <div class="row d-flex m-2 mb-6">
     {% for team in team_list %}
       {% if user in team.team.all %}
         <div class="col-12 col-xl-4 px-1 m-0">
@@ -40,7 +40,6 @@
       {% endif %}
     {% endfor %}
   </div>
-    {% include "includes/footer-fullscreen.html" %}
 </div>
 
 
