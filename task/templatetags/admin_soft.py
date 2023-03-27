@@ -1,7 +1,7 @@
 import re
 from django import template
 from django.utils.html import format_html
-from task.utils import get_menu_items
+from task.utils import Menu
 from django.utils.safestring import mark_safe
 from django.contrib.admin.views.main import PAGE_VAR
 
@@ -27,7 +27,7 @@ def checkbox(value):
 
 @assignment_tag(takes_context=True)
 def admin_get_menu(context):
-    return get_menu_items(context)
+    return Menu.get_menu_items(context)
 
 
 @assignment_tag(takes_context=True)
@@ -71,13 +71,12 @@ def paginator_number(cl, i):
         return format_html("{} ", cl.paginator.ELLIPSIS)
     elif i == cl.page_num:
         return format_html('<a href="" class="page-link">{}</a> ', i)
-    else:
-        return format_html(
-            '<a href="{}" class="page-link {}">{}</a> ',
-            cl.get_query_string({PAGE_VAR: i}),
-            mark_safe("end" if i == cl.paginator.num_pages else ""),
-            i,
-        )
+    return format_html(
+        '<a href="{}" class="page-link {}">{}</a> ',
+        cl.get_query_string({PAGE_VAR: i}),
+        mark_safe("end" if i == cl.paginator.num_pages else ""),
+        i,
+    )
 
 
 @register.filter

@@ -1,4 +1,4 @@
-import datetime
+from collections import OrderedDict
 import json
 from django.template import Context
 from django.utils import translation
@@ -35,7 +35,6 @@ try:
 except ImportError:
     from ordereddict import OrderedDict  # Python 2.6
 
-
 default_apps_icon = {"auth": "fa fa-users"}
 
 
@@ -68,11 +67,7 @@ def get_app_list(context, order=True):
 
     app_dict = {}
     for model, model_admin in admin_site._registry.items():
-        app_icon = (
-            model._meta.app_config.icon
-            if hasattr(model._meta.app_config, "icon")
-            else None
-        )
+        app_icon = getattr(model._meta.app_config, "icon", None)
         app_label = model._meta.app_label
         try:
             has_module_perms = model_admin.has_module_permission(request)
@@ -86,7 +81,7 @@ def get_app_list(context, order=True):
 
             # Check whether user has any perm for this module.
             # If so, add the module to the model_list.
-            if True in perms.values():
+            if any(perms.values()):
                 info = (app_label, model._meta.model_name)
                 model_dict = {
                     "name": capfirst(model._meta.verbose_name_plural),
@@ -127,12 +122,8 @@ def get_app_list(context, order=True):
                         "models": [model_dict],
                     }
 
-                if not app_icon:
-                    app_icon = (
-                        default_apps_icon[app_label]
-                        if app_label in default_apps_icon
-                        else None
-                    )
+                if app_icon is None:
+                    app_icon = default_apps_icon.get(app_label)
                 app_dict[app_label]["icon"] = app_icon
 
     # Sort the apps alphabetically.
@@ -177,7 +168,7 @@ class SuccessMessageMixin(object):
     success_message = ""
 
     def form_valid(self, form):
-        response = super(SuccessMessageMixin, self).form_valid(form)
+        response = super().form_valid(form)
         success_message = self.get_success_message(form.cleaned_data)
         if success_message:
             messages.success(self.request, success_message)
@@ -345,176 +336,179 @@ def get_menu_item_url(url, original_app_list):
         return url
 
 
-def get_menu_items(context):
-    pinned_apps = []
-    original_app_list = OrderedDict(
-        map(lambda app: (app["app_label"], app), get_original_menu_items(context))
-    )
-    custom_app_list = None
-    custom_app_list_deprecated = None
+class Menu:
+    def __init__(self, context):
+        self.context = context
+        self.pinned_apps = []
+        self.original_app_list = OrderedDict(
+            map(lambda app: (app["app_label"], app), get_original_menu_items(self.context))
+        )
+        self.custom_app_list = None
+        self.custom_app_list_deprecated = None
 
-    if custom_app_list not in (None, False):
-        if isinstance(custom_app_list, dict):
-            admin_site = get_admin_site(context)
-            custom_app_list = custom_app_list.get(admin_site.name, [])
+    def get_menu_items(self):
+        if self.custom_app_list not in (None, False):
+            if isinstance(self.custom_app_list, dict):
+                admin_site = self.get_admin_site()
+                self.custom_app_list = self.custom_app_list.get(admin_site.name, [])
 
-        app_list = []
+            app_list = []
 
-        def get_menu_item_app_model(app_label, data):
-            item = {"has_perms": True}
+            for data in self.custom_app_list:
+                item = self.get_menu_item_app(data)
+                app_list.append(item)
+        elif self.custom_app_list_deprecated not in (None, False):
+            app_dict = {}
+            models_dict = {}
 
-            if "name" in data:
-                parts = data["name"].split(".", 2)
+            for app in self.original_app_list.values():
+                app_label = app["app_label"]
+                app_dict[app_label] = app
 
-                if len(parts) > 1:
-                    app_label, name = parts
-                else:
-                    name = data["name"]
+                for model in app["models"]:
+                    if app_label not in models_dict:
+                        models_dict[app_label] = {}
 
-                if app_label in original_app_list:
-                    models = dict(
-                        map(
-                            lambda x: (x["name"], x),
-                            original_app_list[app_label]["models"],
-                        )
-                    )
+                    models_dict[app_label][model["object_name"]] = model
 
-                    if name in models:
-                        item = models[name].copy()
+                app["items"] = []
 
-            if "label" in data:
-                item["label"] = data["label"]
+            app_list = []
 
-            if "url" in data:
-                item["url"] = get_menu_item_url(data["url"], original_app_list)
-
-            if "url_blank" in data:
-                item["url_blank"] = data["url_blank"]
-
-            if "permissions" in data:
-                item["has_perms"] = item.get("has_perms", True) and context[
-                    "user"
-                ].has_perms(data["permissions"])
-
-            return item
-
-        def get_menu_item_app(data):
-            app_label = data.get("app_label")
-
-            if not app_label:
-                if "label" not in data:
-                    raise Exception(
-                        (
-                            "Custom menu items should "
-                            "at least have 'label' or 'app_label' key"
-                        )
-                    )
-                app_label = "custom_%s" % slugify(data["label"], allow_unicode=True)
-
-            if app_label in original_app_list:
-                item = original_app_list[app_label].copy()
-            else:
-                item = {"app_label": app_label, "has_perms": True}
-
-            if "label" in data:
-                item["label"] = data["label"]
-
-            if "items" in data:
-                item["items"] = list(
-                    map(lambda x: get_menu_item_app_model(app_label, x), data["items"])
+            if isinstance(self.custom_app_list_deprecated, dict):
+                admin_site = get_admin_site(self.context)
+                self.custom_app_list_deprecated = self.custom_app_list_deprecated.get(
+                    admin_site.name, []
                 )
 
-            if "url" in data:
-                item["url"] = get_menu_item_url(data["url"], original_app_list)
+            for item in self.custom_app_list_deprecated:
+                app_label, models = item
 
-            if "url_blank" in data:
-                item["url_blank"] = data["url_blank"]
+                if app_label in app_dict:
+                    app = app_dict[app_label]
 
-            if "permissions" in data:
-                item["has_perms"] = item.get("has_perms", True) and context[
-                    "user"
-                ].has_perms(data["permissions"])
+                    for model_label in models:
+                        if model_label == "__all__":
+                            app["items"] = models_dict[app_label].values()
+                            break
+                        elif model_label in models_dict[app_label]:
+                            model = models_dict[app_label][model_label]
+                            app["items"].append(model)
 
-            item["pinned"] = item["app_label"] in pinned_apps
+                    app_list.append(app)
+        else:
+            app_list = list(map(self.map_item, self.original_app_list.values()))
 
-            return item
+        current_found = False
 
-        for data in custom_app_list:
-            item = get_menu_item_app(data)
-            app_list.append(item)
-    elif custom_app_list_deprecated not in (None, False):
-        app_dict = {}
-        models_dict = {}
+        for app in app_list:
+            if not current_found:
+                for model in app["items"]:
+                    if (
+                            not current_found
+                            and model.get("url")
+                            and self.context["request"].path.startswith(model["url"])
+                    ):
+                        model["current"] = True
+                        current_found = True
+                    else:
+                        model["current"] = False
 
-        for app in original_app_list.values():
-            app_label = app["app_label"]
-            app_dict[app_label] = app
-
-            for model in app["models"]:
-                if app_label not in models_dict:
-                    models_dict[app_label] = {}
-
-                models_dict[app_label][model["object_name"]] = model
-
-            app["items"] = []
-
-        app_list = []
-
-        if isinstance(custom_app_list_deprecated, dict):
-            admin_site = get_admin_site(context)
-            custom_app_list_deprecated = custom_app_list_deprecated.get(
-                admin_site.name, []
-            )
-
-        for item in custom_app_list_deprecated:
-            app_label, models = item
-
-            if app_label in app_dict:
-                app = app_dict[app_label]
-
-                for model_label in models:
-                    if model_label == "__all__":
-                        app["items"] = models_dict[app_label].values()
-                        break
-                    elif model_label in models_dict[app_label]:
-                        model = models_dict[app_label][model_label]
-                        app["items"].append(model)
-
-                app_list.append(app)
-    else:
-
-        def map_item(item):
-            item["items"] = item["models"]
-            return item
-
-        app_list = list(map(map_item, original_app_list.values()))
-
-    current_found = False
-
-    for app in app_list:
-        if not current_found:
-            for model in app["items"]:
                 if (
-                    not current_found
-                    and model.get("url")
-                    and context["request"].path.startswith(model["url"])
+                        not current_found
+                        and app.get("url")
+                        and self.context["request"].path.startswith(app["url"])
                 ):
-                    model["current"] = True
+                    app["current"] = True
                     current_found = True
                 else:
-                    model["current"] = False
+                    app["current"] = False
 
-            if (
-                not current_found
-                and app.get("url")
-                and context["request"].path.startswith(app["url"])
-            ):
-                app["current"] = True
-                current_found = True
+        return app_list
+
+
+    def get_menu_item_app_model(self, app_label, data):
+        item = {"has_perms": True}
+
+        if "name" in data:
+            parts = data["name"].split(".", 2)
+
+            if len(parts) > 1:
+                app_label, name = parts
             else:
-                app["current"] = False
+                name = data["name"]
 
-    return app_list
+            if app_label in self.original_app_list:
+                models = dict(
+                    map(
+                        lambda x: (x["name"], x),
+                        self.original_app_list[app_label]["models"],
+                    )
+                )
+
+                if name in models:
+                    item = models[name].copy()
+
+        if "label" in data:
+            item["label"] = data["label"]
+
+        if "url" in data:
+            item["url"] = get_menu_item_url(data["url"], self.original_app_list)
+
+        if "url_blank" in data:
+            item["url_blank"] = data["url_blank"]
+
+        if "permissions" in data:
+            item["has_perms"] = item.get("has_perms", True) and self.context[
+                "user"
+            ].has_perms(data["permissions"])
+
+        return item
+
+    def get_menu_item_app(self, data):
+        app_label = data.get("app_label")
+
+        if not app_label:
+            if "label" not in data:
+                raise Exception(
+                    (
+                        "Custom menu items should "
+                        "at least have 'label' or 'app_label' key"
+                    )
+                )
+            app_label = "custom_%s" % slugify(data["label"], allow_unicode=True)
+
+        if app_label in self.original_app_list:
+            item = self.original_app_list[app_label].copy()
+        else:
+            item = {"app_label": app_label, "has_perms": True}
+
+        if "label" in data:
+            item["label"] = data["label"]
+
+        if "items" in data:
+            item["items"] = list(
+                map(lambda x: self.get_menu_item_app_model(app_label, x), data["items"])
+            )
+
+        if "url" in data:
+            item["url"] = get_menu_item_url(data["url"], self.original_app_list)
+
+        if "url_blank" in data:
+            item["url_blank"] = data["url_blank"]
+
+        if "permissions" in data:
+            item["has_perms"] = item.get("has_perms", True) and self.context[
+                "user"
+            ].has_perms(data["permissions"])
+
+        item["pinned"] = item["app_label"] in self.pinned_apps
+
+        return item
+
+    def map_item(self, item):
+        item["items"] = item["models"]
+        return item
 
 
 def context_to_dict(context):

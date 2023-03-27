@@ -187,7 +187,7 @@ class TaskCreateForm(forms.ModelForm):
     )
     deadline = forms.DateTimeField(widget=DateTimeInput)
     assignees = forms.ModelMultipleChoiceField(
-        queryset=None,
+        queryset=Worker.objects.all(),
         widget=forms.CheckboxSelectMultiple,
         label="Assignees",
         required=False,
@@ -202,11 +202,6 @@ class TaskCreateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         project = self.fields["project"].queryset = (
             Project.objects.filter(team__team=user)
-        )
-        self.fields["assignees"].queryset = (
-            Worker.objects.filter(
-                teams__project=project.get(team__team=user)
-            )
         )
 
 
