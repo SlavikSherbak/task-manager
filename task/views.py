@@ -58,9 +58,12 @@ class ProjectsListView(LoginRequiredMixin, generic.ListView):
         for project in count_user_project:
             tasks = Task.objects.filter(project=project)
             count_task = tasks.count()
-            task_completed = tasks.filter(is_completed=True).count()
+            if count_task > 0:
+                task_completed = tasks.filter(is_completed=True).count()
 
-            tasks_to_do.append(int(round((task_completed / count_task) * 100, 0)))
+                tasks_to_do.append(int(round((task_completed / count_task) * 100, 0)))
+            else:
+                tasks_to_do.append(100)
 
         context["tasks_to_do"] = tasks_to_do
         context["segment"] = "index"
@@ -283,7 +286,7 @@ class UserAllTaskList(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = Task.objects.select_related("task_type").select_related("project")
+        queryset = Task.objects.select_related("task_type").select_related("project").filter(assignees=self.request.user)
 
         return queryset
 

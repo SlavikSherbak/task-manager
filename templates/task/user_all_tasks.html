@@ -45,12 +45,14 @@
                         </span>
                     {% endif %}
                   <span>
+                  {% if user in task.assignees.all %}
                       {% if not task.is_completed %}
                         <br><span class="">
                           <a href="{% url "task:toggle_mark_completed" pk=task.project.id task_id=task.pk %}" class="m-2 btn btn-success">Solved</a>
                         </span>
 
                       {% endif %}
+                  {% endif %}
                   </span>
                 </li>
                 </ul>
