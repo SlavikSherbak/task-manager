@@ -171,15 +171,22 @@ class TaskCreateForm(forms.ModelForm):
         widget=forms.RadioSelect(attrs={"class": "form-check-input"}),
     )
     deadline = forms.DateTimeField(widget=DateTimeInput)
+    assignees = forms.ModelMultipleChoiceField(
+        queryset=None,
+        widget=forms.CheckboxSelectMultiple,
+        label="Assignees",
+        required=False,
+    )
 
     class Meta:
         model = Task
-        exclude = ["is_completed", "assignees"]
+        exclude = ["is_completed"]
         widgets = {"deadline": DateTimeInput()}
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["project"].queryset = Project.objects.filter(team__team=user)
+        project = self.fields["project"].queryset = Project.objects.filter(team__team=user)
+        self.fields["assignees"].queryset = Worker.objects.filter(teams__project=project.get(team__team=user))
 
 
 class TaskSearchForm(forms.Form):
