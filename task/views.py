@@ -98,6 +98,11 @@ class ProjectUpdateView(LoginRequiredMixin, generic.UpdateView):
     form_class = ProjectForm
     success_url = reverse_lazy("task:index")
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
 
 class ProjectDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Project
