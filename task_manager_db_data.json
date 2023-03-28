@@ -35,34 +35,6 @@
     }
   },
   {
-    "model": "task.priority",
-    "pk": 1,
-    "fields": {
-      "name": "Urgent"
-    }
-  },
-  {
-    "model": "task.priority",
-    "pk": 2,
-    "fields": {
-      "name": "Middle"
-    }
-  },
-  {
-    "model": "task.priority",
-    "pk": 3,
-    "fields": {
-      "name": "Hight"
-    }
-  },
-  {
-    "model": "task.priority",
-    "pk": 4 ,
-    "fields": {
-      "name": "Low"
-    }
-  },
-  {
     "model": "task.tasktype",
     "pk": 1 ,
     "fields": {
