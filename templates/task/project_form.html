@@ -1,0 +1,17 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+  <div class="py-4 container-fluid">
+    <div class="row">
+        <div class="col-11 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="text-center">{{ object|yesno:"Edit,Create" }} Project</h4>
+                <p class="text-center text-danger">Before creating a project, you need to create a team on the team tab or use an existing one</p>
+              </div>
+              {% include "includes/form.html" %}
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

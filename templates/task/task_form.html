@@ -1,0 +1,33 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-11 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="text-center">{{ object|yesno:"Edit,Create" }} Task</h4>
+              </div>
+
+
+              <div class="card-body">
+                <form action="" method="post" id="{{ opts.model_name }}_form" novalidate>
+
+                  {% csrf_token %}
+                  {{ form|crispy }}
+                  <input type="submit" class="btn btn-secondary mt-4" value="{{ object|yesno:"Edit,Create" }}">
+                  {% if object %}
+                    <a href="{% url "task:task-delete" pk=task.pk %}" class="btn btn-danger mx-3 mt-4">Delete</a>
+                  {% else %}
+
+                  {% endif %}
+                </form>
+              </div>
+
+            </div>
+        </div>
+    </div>
+
+    </div>
+{% endblock %}

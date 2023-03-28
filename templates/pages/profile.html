@@ -1,0 +1,182 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container-fluid">
+      <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('{% static 'img/curved-images/curved0.jpg' %}'); background-position-y: 50%;">
+        <span class="mask bg-gradient-primary opacity-6"></span>
+      </div>
+      <div class="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
+        <div class="row gx-4">
+          <div class="col-auto">
+            <div class="avatar avatar-xl position-relative">
+              <img src="{% static 'img/bruce-mars.jpg' %}" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+            </div>
+          </div>
+          <div class="col-auto my-auto">
+            <div class="h-100">
+              <h5 class="mb-1">
+                {{ user.first_name }} {{ user.last_name }}
+              </h5>
+              <p class="mb-0 font-weight-bold text-sm">
+                {{ user.position }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-12 col-xl-4">
+          <div class="card h-100">
+            <div class="card-header pb-0 p-3">
+              <div class="row">
+                <div class="col-md-8 d-flex align-items-center">
+                  <h6 class="mb-0">Profile Information</h6>
+                </div>
+{#                <div class="col-md-4 text-end">#}
+{#                  <a href="javascript:;">#}
+{#                    <i class="fas fa-user-edit text-secondary text-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Profile"></i>#}
+{#                  </a>#}
+{#                </div>#}
+              </div>
+            </div>
+            <div class="card-body p-3">
+              <ul class="list-group">
+                <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Full Name:</strong>   {{ user.first_name }} {{ user.last_name }}</li>
+                <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Is moderator:</strong> &nbsp; {{ user.is_staff }}</li>
+                <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Email:</strong> &nbsp; {{ user.email }}</li>
+                <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Position:</strong> &nbsp; {{ user.position.name }}</li>
+                <hr class="horizontal gray-light my-2">
+                <li class="nav-item d-flex align-items-center">
+
+                  <a href="{% url "task:worker-update" pk=user.id %}" class="nav-link text-body font-weight-bold px-0">
+
+                    <i class="fa fa-user me-sm-1"></i>
+                    <span class="d-sm-inline d-none me-3">Edit</span>
+                  </a>
+                </li>
+                <hr class="horizontal gray-light my-1">
+                <li class="nav-item d-flex align-items-center">
+
+                  <a href="{% url 'task:password_change' %}" class="nav-link text-body font-weight-bold px-0">
+                    <span class="d-sm-inline d-none me-3">Change Password</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+            <div class="col-lg-12 col-xl-8 mb-md-0 mb-4">
+              <div class="card">
+                <div class="card-header pb-0">
+                  <div class="row">
+                    <div class="col-lg-6 col-7">
+                      <h6>{{ user.first_name }} {{ user.last_name }} projects</h6>
+                    </div>
+                    <div class="col-lg-6 col-5 my-auto text-end">
+                      <a href="{%  url "task:project-create" %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                        <h6>Create project</h6>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                  <div class="card-body px-0 pb-2">
+                  <div class="table-responsive">
+                    <table class="table align-items-center mb-0">
+                      <thead>
+                        <tr>
+                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project name</th>
+                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Team</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for project in projects %}
+                      {% if user in project.team.team.all %}
+                        <tr>
+                          <td>
+                            <div class="d-flex px-2 py-1">
+                              <div class="d-flex flex-column justify-content-center">
+                                <a href="{%  url "task:task-list" pk=project.id %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                  <h6>{{ project.name }}</h6>
+                                </a>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex px-2 py-1">
+                              <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">{{ project.team.name }}</h6>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      {% endif %}
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+      </div>
+      <div class="row mt-4">
+        {% for task in tasks %}
+        {% if task.is_completed %}
+          <div class="col-12 col-xl-4 mb-3 px-1">
+          <div class="card h-100 max-width-500 p-2">
+              <div class="card-header pb-0">
+                    <h6 class="text-start mb-0">{{ task.name }}</h6>
+              </div>
+              <div class="card-body p-2">
+                <p class="text-sm">
+                  {{ task.description }}
+                </p>
+                <hr class="horizontal gray-light my-4">
+                <ul class="list-group">
+                  <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Deadline:</strong> &nbsp; {{ task.deadline }}</li>
+                  <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Priority:</strong> &nbsp; {{ task.priority }}</li>
+                  <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Type:</strong> &nbsp; {{ task.task_type.name }}</li>
+                  <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Performer:</strong> &nbsp;
+                    {% if task.assignees %}
+                      {% for assignee in task.assignees.all %}
+                        {{ assignee.username }},
+                      {% endfor %}
+                    {% else %}
+                      <p>Nobody here</p>
+                    {% endif %}<br>
+                  </li>
+                  <li class="list-group-item border-0 ps-0 pb-0">
+                    <strong class="text-dark text-sm">Status:</strong> &nbsp;
+                      {% if task.is_completed %}
+                          Completed ✅
+                        {% else %}
+                          <span class="text-danger">
+                            Not completed
+                          </span>
+                      {% endif %}
+                    <span>
+                      {% if user in task.assignees.all %}
+                        {% if not task.is_completed %}
+                          <br><span class="d-inline-block">
+                            <a href="{% url "task:toggle_mark_completed" pk=project.id task_id=task.pk %}" class="text-success">Solved</a>
+                          </span>
+
+                        {% endif %}
+                      {% endif %}
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% endfor %}
+      </div>
+
+    </div>
+
+{% endblock content %}
