@@ -3,13 +3,18 @@
 {% block content %}
 <div class="container-fluid py-4">
   <div class="row">
-    <h4 class="mb-0 col-12 text-center">Tasks</h4>
+    <h4 class="mb-0 col-sm-12 col-lg-4 ">Tasks</h4>
+    <div class="col-sm-12 col-lg-4 ">
+      {% include "includes/search_form.html" %}
+    </div>
+    <a class="btn btn-link text-dark mb-0 col-sm-12 col-lg-4 d-inline-block text-end" href="{% url "task:task-create" %}"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Create task</a>
+
   </div>
 
   <div class="row d-flex mb-4 p-3">
     {% for task in task_list %}
       {% if user in task.project.team.team.all %}
-        <div class="col-12 col-xl-4 mb-4">
+        <div class="col-md-6 col-xl-4 mb-3 px-1">
         <div class="card h-100 max-width-450">
             <div class="card-header pb-0 p-3">
               <div class="row">

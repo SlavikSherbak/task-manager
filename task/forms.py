@@ -200,9 +200,10 @@ class TaskCreateForm(forms.ModelForm):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        project = self.fields["project"].queryset = (
+        self.fields["project"].queryset = (
             Project.objects.filter(team__team=user)
         )
+        self.fields["assignees"].queryset = Worker.objects.filter(teams__team__username=user.username)
 
 
 class TaskSearchForm(forms.Form):
