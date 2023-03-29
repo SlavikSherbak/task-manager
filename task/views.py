@@ -275,6 +275,12 @@ class UserAllTaskList(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        name = self.request.GET.get("name", "")
+
+        context["search_form"] = TaskSearchForm(
+            initial={"name": name}
+        )
+
         context["segment"] = "user_tasks"
         return context
 
@@ -284,6 +290,13 @@ class UserAllTaskList(LoginRequiredMixin, generic.ListView):
             .select_related("project")
             .filter(assignees=self.request.user)
         )
+
+        form = TaskSearchForm(self.request.GET)
+
+        if form.is_valid():
+            return queryset.filter(
+                name__icontains=form.cleaned_data["name"]
+            )
 
         return queryset
 
