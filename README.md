@@ -5,7 +5,12 @@ awesome when someone starts to use it.
 
 #  Check it out!
 
-[Task Manager deploying to Heriku](https://task-manager-tafz.onrender.com)
+[Task Manager deploying to Render](https://task-manager-tafz.onrender.com)
+
+## Test user
+
+Username: adam_smith<br>
+Password: adam12345
 
 ## Installation
 
@@ -19,7 +24,6 @@ pip install -r requirements.txt
 python manage.py runserver # starts local Django Server
 ```
 
-
 ## Features
 
 * Task Creation and Assignment: With this task manager, team members can easily create tasks and assign them to other team members. This helps to ensure that everyone knows what tasks they are responsible for and what tasks they need to complete.
@@ -27,7 +31,6 @@ python manage.py runserver # starts local Django Server
 * Project and Team Support: The task manager supports the creation of multiple projects and teams. Different teams can work on different projects, and each team has access to the tasks that are relevant to them. This helps to keep everyone organized and ensures that tasks are completed in a timely manner.
 
 * Task Tracking and Reporting: The task manager allows team members to track the progress of their tasks and provides a clear overview of completed and outstanding tasks. This helps team members to prioritize their work and ensures that deadlines are met.
-
 
 
 ## Demo
